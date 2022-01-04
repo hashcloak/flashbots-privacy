@@ -1,0 +1,14 @@
+// Pseudo-code.
+// TBD how to handle this practically 
+def bundle_scoring(bundle, mempool_txs, coinbase_difference):
+    sum_over_txs_in_bundle = sum([i.gas * i.miner_fee for i in bundle.txs])
+    txs_in_bundle_and_mempool = set(bundles.txs) & set(mempool_txs)
+    sum_over_txs_in_bundle_and_mempool = sum([i.gas * i.miner_fee for i in txs_in_bundle_and_mempool])
+    sum_of_gas_over_all_txs_in_bundle = sum([i.gas for i in bundle.txs])
+
+    score = (coinbase_difference + sum_over_txs_in_bundle - sum_over_txs_in_bundle_and_mempool) / sum_of_gas_over_all_txs_in_bundle
+    return score
+
+def score_all_bundles(bundles=(), mempool):
+    scores = sort([[bundle_scoring(bundle[0], bundle[1], mempool), bundle] for bundle in bundles])
+    return scores
