@@ -1,9 +1,28 @@
-// Pseudo-code.
-// TBD how to handle this practically 
-def bundle_scoring(bundle, mempool_txs, coinbase_difference):
-    sum_over_txs_in_bundle = sum([i.gas * i.miner_fee for i in bundle.txs])
+# Pseudo-code.
+# TBD how to handle this practically 
+
+class Tx:
+    def __init__(self, gas, gas_price, fee_cap, priority_fee):
+        self.gas = gas
+        self.gas_price = gas_price
+        self.fee_cap = fee_cap
+        self.priority_fee = priority_fee
+
+    def calculate_effective_fee_per_gas(self, basefee):
+        return min(self.fee_cap, basefee + self.priority_fee)
+
+    def calculate_miner_fee_per_gas(self, basefee):
+        effecitve_fee = self.calculate_effective_fee_per_gas(basefee)
+        return effecitve_fee - basefee
+
+class Bundle:
+    def __init__(self, txs=[]):
+        self.txs = txs
+
+def bundle_scoring(bundle, mempool_txs, coinbase_difference, basefee):
+    sum_over_txs_in_bundle = sum([i.gas * i.calculate_miner_fee(basefee) for i in bundle.txs])
     txs_in_bundle_and_mempool = set(bundles.txs) & set(mempool_txs)
-    sum_over_txs_in_bundle_and_mempool = sum([i.gas * i.miner_fee for i in txs_in_bundle_and_mempool])
+    sum_over_txs_in_bundle_and_mempool = sum([i.gas * i.calculate_miner_fee(basefee) for i in txs_in_bundle_and_mempool])
     sum_of_gas_over_all_txs_in_bundle = sum([i.gas for i in bundle.txs])
 
     score = (coinbase_difference + sum_over_txs_in_bundle - sum_over_txs_in_bundle_and_mempool) / sum_of_gas_over_all_txs_in_bundle
