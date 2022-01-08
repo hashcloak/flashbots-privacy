@@ -13,10 +13,12 @@ def calculate_miner_fee(fee_cap, basefee, priority_fee):
 def bundle_scoring(bundle, mempool_txs, coinbase_difference, basefee):
     sum_over_txs_in_bundle = sum([bundle[i][0] * calculate_miner_fee(bundle[i][2], basefee, bundle[i][3]) for i in range(3)])
     txs_in_bundle_and_mempool = sfix.Matrix(3, 4)
+    counter = 0
     for i in range(6):
         for j in range(3):
             if bundle[j] == mempool_txs[i]:
-                txs_in_bundle_and_mempool[j] = bundle[j]
+                txs_in_bundle_and_mempool[counter] = bundle[j]
+                counter += 1
     sum_over_txs_in_bundle_and_mempool = sum([bundle[i][0] * calculate_miner_fee(bundle[i][2], basefee, bundle[i][3]) for i in range(3)])
     sum_of_gas_over_all_txs_in_bundle = sum([bundle[i][0] for i in range(3)])
 
@@ -31,17 +33,17 @@ bundles = []
 mempools = []
 coinbase_differences = []
 basefees = []
-for i in range(2):
+for i in range(10):
     bundle = Matrix(3, 4, sfix)
     mempool_txs = Matrix(6, 4, sfix)
     #print_ln("%s", sfix.get_input_from(i).reveal())
     for j in range(3):
-        bundle[i].input_from(i)
-        #print_ln("bundle[%s]: %s", i, bundle[i].reveal())
+        bundle[j].input_from(i)
+        #print_ln("bundle[%s]: %s", j, bundle[i].reveal())
         bundles.append(bundle)
     for k in range(6):
-        mempool_txs[i].input_from(i)
-        #print_ln("mempool_txs[%s]: %s", i, mempool_txs[i].reveal())
+        mempool_txs[k].input_from(i)
+        #print_ln("mempool_txs[%s]: %s", k, mempool_txs[i].reveal())
         mempools.append(mempool_txs)
     coinbase_differences.append(sfix.get_input_from(i))
     #print_ln("coinbase_difference: %s", coinbase_difference.reveal())
