@@ -1,33 +1,55 @@
 # Pseudo-code.
 # TBD how to handle this practically 
+import sys
+sys.path.append("../flashbots_mpc")
+import flashbots_types
 
-class Tx:
-    def __init__(self, gas, gas_price, fee_cap, priority_fee):
-        self.gas = gas
-        self.gas_price = gas_price
-        self.fee_cap = fee_cap
-        self.priority_fee = priority_fee
+def calculate_effective_fee_per_gas(fee_cap, basefee, priority_fee):
+    # Workaround until I can find an algorithm for min/max on secret-shared values
+    return fee_cap.reveal().min((basefee + priority_fee).reveal())
 
-    def calculate_effective_fee_per_gas(self, basefee):
-        return min(self.fee_cap, basefee + self.priority_fee)
-
-    def calculate_miner_fee_per_gas(self, basefee):
-        effecitve_fee = self.calculate_effective_fee_per_gas(basefee)
-        return effecitve_fee - basefee
-
-class Bundle:
-    def __init__(self, txs=[]):
-        self.txs = txs
+def calculate_miner_fee(fee_cap, basefee, priority_fee):
+    return calculate_effective_fee_per_gas(fee_cap, basefee, priority_fee) - basefee
 
 def bundle_scoring(bundle, mempool_txs, coinbase_difference, basefee):
-    sum_over_txs_in_bundle = sum([i.gas * i.calculate_miner_fee(basefee) for i in bundle.txs])
-    txs_in_bundle_and_mempool = set(bundles.txs) & set(mempool_txs)
-    sum_over_txs_in_bundle_and_mempool = sum([i.gas * i.calculate_miner_fee(basefee) for i in txs_in_bundle_and_mempool])
-    sum_of_gas_over_all_txs_in_bundle = sum([i.gas for i in bundle.txs])
+    sum_over_txs_in_bundle = sum([bundle[i][0] * calculate_miner_fee(bundle[i][2], basefee, bundle[i][3]) for i in range(3)])
+    txs_in_bundle_and_mempool = sfix.Matrix(3, 4)
+    for i in range(6):
+        for j in range(3):
+            if bundle[j] == mempool_txs[i]:
+                txs_in_bundle_and_mempool[j] = bundle[j]
+    sum_over_txs_in_bundle_and_mempool = sum([bundle[i][0] * calculate_miner_fee(bundle[i][2], basefee, bundle[i][3]) for i in range(3)])
+    sum_of_gas_over_all_txs_in_bundle = sum([bundle[i][0] for i in range(3)])
 
     score = (coinbase_difference + sum_over_txs_in_bundle - sum_over_txs_in_bundle_and_mempool) / sum_of_gas_over_all_txs_in_bundle
     return score
 
-def score_all_bundles(bundles=(), mempool):
-    scores = sort([[bundle_scoring(bundle[0], bundle[1], mempool), bundle] for bundle in bundles])
-    return scores
+def score_all_bundles(bundles, mempools, coinbase_differences, basefees):
+    return sort([bundle_scoring(bundle, mempool, coinbase_difference, basefee).reveal() for bundle, mempool, coinbase_difference, basefee in zip(bundles, mempools, coinbase_differences, basefees)])
+    
+
+bundles = []
+mempools = []
+coinbase_differences = []
+basefees = []
+for i in range(2):
+    bundle = Matrix(3, 4, sfix)
+    mempool_txs = Matrix(6, 4, sfix)
+    #print_ln("%s", sfix.get_input_from(i).reveal())
+    for j in range(3):
+        bundle[i].input_from(i)
+        #print_ln("bundle[%s]: %s", i, bundle[i].reveal())
+        bundles.append(bundle)
+    for k in range(6):
+        mempool_txs[i].input_from(i)
+        #print_ln("mempool_txs[%s]: %s", i, mempool_txs[i].reveal())
+        mempools.append(mempool_txs)
+    coinbase_differences.append(sfix.get_input_from(i))
+    #print_ln("coinbase_difference: %s", coinbase_difference.reveal())
+    basefees.append(sfix.get_input_from(i))
+    #print_ln("basefee: %s", basefee.reveal())
+    #score_bundle = bundle_scoring(bundle, mempool_txs, coinbase_difference, basefee).reveal()
+scores = score_all_bundles(bundles, mempools, coinbase_differences, basefees)
+for score in scores:
+    print_ln("score: %s", score)
+#print_ln("bundle[%s]'s score: %s", i, score_bundle)
