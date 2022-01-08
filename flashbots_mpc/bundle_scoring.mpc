@@ -5,8 +5,7 @@ sys.path.append("../flashbots_mpc")
 import flashbots_types
 
 def calculate_effective_fee_per_gas(fee_cap, basefee, priority_fee):
-    # Workaround until I can find an algorithm for min/max on secret-shared values
-    return fee_cap.reveal().min((basefee + priority_fee).reveal())
+    return (basefee + priority_fee > fee_cap).if_else(fee_cap, basefee + priority_fee)
 
 def calculate_miner_fee(fee_cap, basefee, priority_fee):
     return calculate_effective_fee_per_gas(fee_cap, basefee, priority_fee) - basefee
