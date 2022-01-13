@@ -18,6 +18,13 @@ class Tx:
         effecitve_fee = self.calculate_effective_fee_per_gas(basefee)
         return effecitve_fee - basefee
 
+    def to_int_rep(self, f=16):
+        gas = round(self.gas * (2**f))
+        gas_price = round(self.gas_price * (2**f))
+        fee_cap = round(self.fee_cap * (2**f))
+        priority_fee = round(self.priority_fee * (2**f))
+        return Tx(gas, gas_price, fee_cap, priority_fee)
+
     def __str__(self):
         return "{} {} {} {}".format(self.gas, self.gas_price, self.fee_cap, self.priority_fee)
 
