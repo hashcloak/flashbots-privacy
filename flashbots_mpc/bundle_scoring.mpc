@@ -27,30 +27,31 @@ def bundle_scoring(bundle, mempool_txs, coinbase_difference, basefee):
 
 def score_all_bundles(bundles, mempools, coinbase_differences, basefees):
     return sort([bundle_scoring(bundle, mempool, coinbase_difference, basefee).reveal() for bundle, mempool, coinbase_difference, basefee in zip(bundles, mempools, coinbase_differences, basefees)])
-    
 
+# Load mempool txs
+mempool = Matrix(130, 4, cfix)
+for j in range(129):
+    gas = cint(public_input())
+    gas_price = cint(public_input())
+    fee_cap = cint(public_input())
+    priority_fee = cint(public_input())
+    mempool[j] = [gas, gas_price, fee_cap, priority_fee]
+    #print_ln("%s", mempool[j])    
+
+# Load searcher txs
 bundles = []
-mempools = []
 coinbase_differences = []
 basefees = []
 for i in range(10):
     bundle = Matrix(3, 4, sfix)
-    mempool_txs = Matrix(6, 4, sfix)
     #print_ln("%s", sfix.get_input_from(i).reveal())
     for j in range(3):
         bundle[j].input_from(i)
-        #print_ln("bundle[%s]: %s", j, bundle[i].reveal())
         bundles.append(bundle)
-    for k in range(6):
-        mempool_txs[k].input_from(i)
-        #print_ln("mempool_txs[%s]: %s", k, mempool_txs[i].reveal())
-        mempools.append(mempool_txs)
-    coinbase_differences.append(sfix.get_input_from(i))
-    #print_ln("coinbase_difference: %s", coinbase_difference.reveal())
-    basefees.append(sfix.get_input_from(i))
-    #print_ln("basefee: %s", basefee.reveal())
-    #score_bundle = bundle_scoring(bundle, mempool_txs, coinbase_difference, basefee).reveal()
-scores = score_all_bundles(bundles, mempools, coinbase_differences, basefees)
-for score in scores:
-    print_ln("score: %s", score)
-#print_ln("bundle[%s]'s score: %s", i, score_bundle)
+    #coinbase_differences.append(sfix.get_input_from(i))
+    #basefees.append(sfix.get_input_from(i))
+
+#scores = score_all_bundles(bundles, mempools, coinbase_differences, basefees)
+#for score in scores:
+#    print_ln("score: %s", score)
+
