@@ -2,7 +2,7 @@ import sys
 
 # Get MP-SPDZ types
 sys.path.append("../MP-SPDZ/")
-from Compiler.types import sfloat
+from Compiler.types import cfix
 
 class Tx:
     def __init__(self, gas, gas_price, fee_cap, priority_fee):
@@ -25,6 +25,13 @@ class Tx:
         priority_fee = round(self.priority_fee * (2**f))
         return Tx(gas, gas_price, fee_cap, priority_fee)
 
+    def from_int_rep(self, f=16):
+        gas = round(self.gas / (2**f))
+        gas_price = round(self.gas_price / (2**f))
+        fee_cap = round(self.fee_cap / (2**f))
+        priority_fee = round(self.priority_fee / (2**f))
+        return Tx(gas, gas_price, fee_cap, priority_fee)
+
     def __str__(self):
         return "{} {} {} {}".format(self.gas, self.gas_price, self.fee_cap, self.priority_fee)
 
@@ -37,7 +44,7 @@ class Bundle:
 
     def score_bundle(self, mempool_txs, coinbase_difference, basefee):
         sum_over_txs_in_bundle = sum([tx.gas * tx.calculate_miner_fee_per_gas(basefee) for tx in self.txs])
-        txs_in_bundle_and_mempool = list(set(mempool_txs).intersect(set(self.txs)))
+        txs_in_bundle_and_mempool = list(set(mempool_txs).intersection(set(self.txs)))
         sum_over_txs_in_bundle_and_mempool = sum(tx.gas * tx.calculate_miner_fee_per_gas(basefee) for tx in txs_in_bundle_and_mempool)
         sum_of_gas_over_all_txs_in_bundle = sum(tx.gas for tx in self.txs)
         score = (coinbase_difference + sum_of_gas_over_all_txs_in_bundle - sum_over_txs_in_bundle_and_mempool) / sum_of_gas_over_all_txs_in_bundle
