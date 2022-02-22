@@ -41,19 +41,20 @@ def expected_scores():
             with open("./Player-Data/Input-P{}-0".format(i), 'r') as private_data:
                 txs_bundle = []
                 for j in range(6):
-                    line = private_data.readline().strip()
-                    txs_bundle.append(flashbots_types.Tx(int(line[0]), int(line[1]), int(line[2]), int(line[3])))
+                    line = private_data.readline().split(" ")
+                    tx = flashbots_types.Tx(int(line[0]), int(line[1]), int(line[2]), int(line[3])).from_int_rep()
+                    txs_bundle.append(tx)
                 coinbase_difference = float(private_data.readline().strip())
                 basefee = float(private_data.readline().strip())
 
-                bundle = flashbots_types.Bundle(txs_bundle)
-                bundles.append([bundle, coinbase_difference, basefee])
+                bundle = flashbots_types.Bundle(coinbase_difference, basefee, txs_bundle)
+                bundles.append(bundle)
         for line in public_data.readlines():
             line = line.strip()
             tx = flashbots_types.Tx(int(line[0]), int(line[1]), int(line[2]), int(line[3])).from_int_rep()
             mempool.append(tx)
         for bundle in bundles:
-            scores.append(bundle[0].score_bundle(mempool, bundle[1], bundle[2]))
+            scores.append(bundle.score_bundle(mempool))
 
     return scores
 
