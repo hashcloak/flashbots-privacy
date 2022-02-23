@@ -1,8 +1,8 @@
 # Generates fake inputs for the relayers to compute on
 
-from email.mime import base
 import flashbots_types
 import random
+from decimal import Decimal
 
 def generate_random_tx():
     gas = random.randrange(21000, 3000001)
@@ -34,10 +34,18 @@ def generate_data_file():
 
 def expected_scores():
     scores = []
+
+    # Load mempool
+    mempool = []
     with open("../MP-SPDZ/Programs/Public-Input/bundle_scoring", "r") as public_data:
-        bundles = []
-        mempool = []
-        for i in range(10):
+        for line in public_data.readlines():
+            line = line.split(" ")
+            tx = flashbots_types.Tx(int(line[0]), int(line[1]), int(line[2]), int(line[3])).from_int_rep()
+            mempool.append(tx)
+
+    # Load txs
+    bundles = []
+    for i in range(10):
             with open("./Player-Data/Input-P{}-0".format(i), 'r') as private_data:
                 txs_bundle = []
                 for j in range(6):
@@ -49,12 +57,9 @@ def expected_scores():
 
                 bundle = flashbots_types.Bundle(coinbase_difference, basefee, txs_bundle)
                 bundles.append(bundle)
-        for line in public_data.readlines():
-            line = line.strip()
-            tx = flashbots_types.Tx(int(line[0]), int(line[1]), int(line[2]), int(line[3])).from_int_rep()
-            mempool.append(tx)
-        for bundle in bundles:
-            scores.append(bundle.score_bundle(mempool))
+
+    for bundle in bundles:
+        scores.append(bundle.score_bundle(mempool))
 
     return scores
 

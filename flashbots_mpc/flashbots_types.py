@@ -1,7 +1,9 @@
+from email.mime import base
 import sys
 
 # Get MP-SPDZ types
 sys.path.append("../MP-SPDZ/")
+from decimal import Decimal
 
 class Tx:
     def __init__(self, gas, gas_price, fee_cap, priority_fee):
@@ -45,7 +47,7 @@ class Bundle:
 
     def score_bundle(self, mempool_txs):
         sum_over_txs_in_bundle = sum([tx.gas * tx.calculate_miner_fee_per_gas(self.basefee) for tx in self.txs])
-        txs_in_bundle_and_mempool = list(set(mempool_txs).intersection(set(self.txs)))
+        txs_in_bundle_and_mempool = set(mempool_txs).intersection(set(self.txs))
         sum_over_txs_in_bundle_and_mempool = sum(tx.gas * tx.calculate_miner_fee_per_gas(self.basefee) for tx in txs_in_bundle_and_mempool)
         sum_of_gas_over_all_txs_in_bundle = sum(tx.gas for tx in self.txs)
         score = (self.coinbase_difference + sum_over_txs_in_bundle - sum_over_txs_in_bundle_and_mempool) / sum_of_gas_over_all_txs_in_bundle
