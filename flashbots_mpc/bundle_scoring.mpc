@@ -5,8 +5,15 @@ sys.path.append("../flashbots_mpc")
 import flashbots_types
 import util
 
+sfix.round_nearest = True
+cfix.set_precision(f=16, k=40)
+sfix.set_precision(f=16, k=40)
+
 def calculate_effective_fee_per_gas(fee_cap, basefee, priority_fee):
-    return (basefee + priority_fee > fee_cap).if_else(fee_cap, basefee + priority_fee)
+    #print_ln("effective_fee: %s", (basefee + priority_fee > fee_cap).if_else(fee_cap, basefee + priority_fee).reveal())
+    #return (basefee + priority_fee > fee_cap).if_else(fee_cap, basefee + priority_fee)
+    #print_ln("basefee + priority: %s", (basefee + priority_fee).reveal())
+    return fee_cap.min(basefee + priority_fee)
 
 def calculate_miner_fee(fee_cap, basefee, priority_fee):
     return calculate_effective_fee_per_gas(fee_cap, basefee, priority_fee) - basefee
@@ -16,25 +23,26 @@ def intersection_of_mempool_and_bundle(bundle, mempool):
     counter = 0
     for i in range(130):
         for j in range(6):
-            if mempool[i] == bundle[j]:
-                intersection[counter] = bundle[j]
+            if mempool[i] == bundle[0][j]:
+                intersection[counter] = bundle[0][j]
                 counter += 1
 
     return intersection
 
 
-def bundle_scoring(bundle, mempool_txs, coinbase_difference, basefee):
-    sum_over_txs_in_bundle = sum([bundle[i][0] * calculate_miner_fee(bundle[i][2], basefee, bundle[i][3]) for i in range(6)])
+def bundle_scoring(bundle, mempool_txs):
+    sum_over_txs_in_bundle = sum([bundle[0][i][0] * calculate_miner_fee(bundle[0][i][2], bundle[2], bundle[0][i][3]) for i in range(6)])
+    print_ln("%s", sum_over_txs_in_bundle.reveal())
     txs_in_bundle_and_mempool = intersection_of_mempool_and_bundle(bundle, mempool_txs)
-    sum_over_txs_in_bundle_and_mempool = sum([txs_in_bundle_and_mempool[i][0] * calculate_miner_fee(bundle[i][2], basefee, txs_in_bundle_and_mempool[i][3]) for i in range(6)])
+    sum_over_txs_in_bundle_and_mempool = sum([txs_in_bundle_and_mempool[i][0] * calculate_miner_fee(txs_in_bundle_and_mempool[i][2], bundle[2], txs_in_bundle_and_mempool[i][3]) for i in range(6)])
     #print_ln("%s", (coinbase_difference + sum_over_txs_in_bundle - sum_over_txs_in_bundle_and_mempool).reveal())
-    sum_of_gas_over_all_txs_in_bundle = sum([bundle[i][0] for i in range(6)])
+    sum_of_gas_over_all_txs_in_bundle = sum([bundle[0][i][0] for i in range(6)])
     #print_ln("%s", sum_of_gas_over_all_txs_in_bundle.reveal())
-    score = (coinbase_difference + sum_over_txs_in_bundle - sum_over_txs_in_bundle_and_mempool) / sum_of_gas_over_all_txs_in_bundle
+    score = (bundle[1] + sum_over_txs_in_bundle - sum_over_txs_in_bundle_and_mempool) / sum_of_gas_over_all_txs_in_bundle
     return score
 
-def score_all_bundles(bundles, mempool, coinbase_differences, basefees):
-    return sort([bundle_scoring(bundle, mempool, coinbase_difference, basefee).reveal() for bundle, coinbase_difference, basefee in zip(bundles, coinbase_differences, basefees)])
+def score_all_bundles(bundles, mempool):
+    return sort([bundle_scoring(bundle, mempool).reveal() for bundle in bundles])
 
 # Load mempool txs
 # TODO: Fix types
@@ -45,7 +53,8 @@ for j in range(130):
     fee_cap = cfix(public_input())
     priority_fee = cfix(public_input())
     mempool[j] = [gas, gas_price, fee_cap, priority_fee]
-    #print_ln("%s", mempool[j])    
+    #print_ln("%s", mempool[j])   
+
 
 # Load searcher txs
 # Should be an MP-SPDZ array. Regular Python arrays will do for now.
@@ -58,10 +67,15 @@ for i in range(10):
     for j in range(6):
         bundle[j] = sfix._new(sint.get_input_from(i, size=4))
         #print_ln("%s", bundle[j].reveal())
-    bundles.append(bundle)
-    coinbase_differences.append(sfix.get_input_from(i))
-    basefees.append(sfix.get_input_from(i))
+    #bundles.append(bundle)
+    #coinbase_differences.append(sfix.get_input_from(i))
+    #basefees.append(sfix.get_input_from(i))
+    coinbase_difference = sfix.get_input_from(i)
+    basefee = sfix.get_input_from(i)
+    #bundle.print_reveal_nested()
+    #print_ln("%s, %s", coinbase_difference.reveal(), basefee.reveal())
+    bundles.append([bundle, coinbase_difference, basefee])
 
-scores = score_all_bundles(bundles, mempool, coinbase_differences, basefees)
+scores = score_all_bundles(bundles, mempool)
 for score in scores:
     print_ln("score: %s", score)
