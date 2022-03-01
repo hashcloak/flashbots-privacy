@@ -10,9 +10,6 @@ cfix.set_precision(f=16, k=80)
 sfix.set_precision(f=16, k=80)
 
 def calculate_effective_fee_per_gas(fee_cap, basefee, priority_fee):
-    #print_ln("effective_fee: %s", (basefee + priority_fee > fee_cap).if_else(fee_cap, basefee + priority_fee).reveal())
-    #return (basefee + priority_fee > fee_cap).if_else(fee_cap, basefee + priority_fee)
-    #print_ln("basefee + priority: %s", (basefee + priority_fee).reveal())
     return fee_cap.min(basefee + priority_fee)
 
 def calculate_miner_fee(fee_cap, basefee, priority_fee):
@@ -32,12 +29,9 @@ def intersection_of_mempool_and_bundle(bundle, mempool):
 
 def bundle_scoring(bundle, mempool_txs):
     sum_over_txs_in_bundle = sum([bundle[0][i][0] * calculate_miner_fee(bundle[0][i][2], bundle[2], bundle[0][i][3]) for i in range(6)])
-    #print_ln("%s", sum_over_txs_in_bundle.reveal())
     txs_in_bundle_and_mempool = intersection_of_mempool_and_bundle(bundle, mempool_txs)
     sum_over_txs_in_bundle_and_mempool = sum([txs_in_bundle_and_mempool[i][0] * calculate_miner_fee(txs_in_bundle_and_mempool[i][2], bundle[2], txs_in_bundle_and_mempool[i][3]) for i in range(6)])
-    #print_ln("%s", (coinbase_difference + sum_over_txs_in_bundle - sum_over_txs_in_bundle_and_mempool).reveal())
     sum_of_gas_over_all_txs_in_bundle = sum([bundle[0][i][0] for i in range(6)])
-    #print_ln("%s", sum_of_gas_over_all_txs_in_bundle.reveal())
     print_ln("%s", (bundle[1] + sum_over_txs_in_bundle - sum_over_txs_in_bundle_and_mempool).reveal())
     score = (bundle[1] + sum_over_txs_in_bundle - sum_over_txs_in_bundle_and_mempool) / sum_of_gas_over_all_txs_in_bundle
     return score
@@ -46,7 +40,6 @@ def score_all_bundles(bundles, mempool):
     return sort([bundle_scoring(bundle, mempool).reveal() for bundle in bundles])
 
 # Load mempool txs
-# TODO: Fix types
 mempool = Matrix(130, 4, cfix)
 for j in range(130):
     gas = cfix(public_input())
@@ -54,7 +47,6 @@ for j in range(130):
     fee_cap = cfix(public_input())
     priority_fee = cfix(public_input())
     mempool[j] = [gas, gas_price, fee_cap, priority_fee]
-    #print_ln("%s", mempool[j])   
 
 
 # Load searcher txs
@@ -64,17 +56,11 @@ coinbase_differences = []
 basefees = []
 for i in range(10):
     bundle = Matrix(6, 4, sfix)
-    #print_ln("%s", sfix.get_input_from(i).reveal())
     for j in range(6):
         bundle[j] = sfix._new(sint.get_input_from(i, size=4))
         #print_ln("%s", bundle[j].reveal())
-    #bundles.append(bundle)
-    #coinbase_differences.append(sfix.get_input_from(i))
-    #basefees.append(sfix.get_input_from(i))
     coinbase_difference = sfix.get_input_from(i)
     basefee = sfix.get_input_from(i)
-    #bundle.print_reveal_nested()
-    #print_ln("%s, %s", coinbase_difference.reveal(), basefee.reveal())
     bundles.append([bundle, coinbase_difference, basefee])
 
 scores = score_all_bundles(bundles, mempool)
