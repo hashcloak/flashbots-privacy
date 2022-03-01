@@ -43,7 +43,8 @@ class Bundle:
         self.basefee = basefee
 
     def __str__(self):
-        return "\n".join([str(tx) for tx in self.txs])
+        txs = "\n".join([str(tx) for tx in self.txs])
+        return "txs: {}\ncoinbase_difference: {}\nbasefee: {}\n".format(txs, self.coinbase_difference, self.basefee)
 
     def score_bundle(self, mempool_txs):
         sum_over_txs_in_bundle = sum([tx.gas * tx.calculate_miner_fee_per_gas(self.basefee) for tx in self.txs])
