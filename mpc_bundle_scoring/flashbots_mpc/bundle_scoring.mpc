@@ -1,0 +1,68 @@
+# Pseudo-code.
+# TBD how to handle this practically 
+import sys
+sys.path.append("../flashbots_mpc")
+import flashbots_types
+import util
+
+sfix.round_nearest = True
+cfix.set_precision(f=16, k=80)
+sfix.set_precision(f=16, k=80)
+
+def calculate_effective_fee_per_gas(fee_cap, basefee, priority_fee):
+    return fee_cap.min(basefee + priority_fee)
+
+def calculate_miner_fee(fee_cap, basefee, priority_fee):
+    return calculate_effective_fee_per_gas(fee_cap, basefee, priority_fee) - basefee
+
+def intersection_of_mempool_and_bundle(bundle, mempool):
+    intersection = Matrix(6, 4, sfix)
+    counter = 0
+    for i in range(130):
+        for j in range(6):
+            if mempool[i] == bundle[0][j]:
+                intersection[counter] = bundle[0][j]
+                counter += 1
+
+    return intersection
+
+
+def bundle_scoring(bundle, mempool_txs):
+    sum_over_txs_in_bundle = sum([bundle[0][i][0] * calculate_miner_fee(bundle[0][i][2], bundle[2], bundle[0][i][3]) for i in range(6)])
+    txs_in_bundle_and_mempool = intersection_of_mempool_and_bundle(bundle, mempool_txs)
+    sum_over_txs_in_bundle_and_mempool = sum([txs_in_bundle_and_mempool[i][0] * calculate_miner_fee(txs_in_bundle_and_mempool[i][2], bundle[2], txs_in_bundle_and_mempool[i][3]) for i in range(6)])
+    sum_of_gas_over_all_txs_in_bundle = sum([bundle[0][i][0] for i in range(6)])
+    print_ln("%s", (bundle[1] + sum_over_txs_in_bundle - sum_over_txs_in_bundle_and_mempool).reveal())
+    score = (bundle[1] + sum_over_txs_in_bundle - sum_over_txs_in_bundle_and_mempool) / sum_of_gas_over_all_txs_in_bundle
+    return score
+
+def score_all_bundles(bundles, mempool):
+    return sort([bundle_scoring(bundle, mempool).reveal() for bundle in bundles])
+
+# Load mempool txs
+mempool = Matrix(130, 4, cfix)
+for j in range(130):
+    gas = cfix(public_input())
+    gas_price = cfix(public_input())
+    fee_cap = cfix(public_input())
+    priority_fee = cfix(public_input())
+    mempool[j] = [gas, gas_price, fee_cap, priority_fee]
+
+
+# Load searcher txs
+# Should be an MP-SPDZ array. Regular Python arrays will do for now.
+bundles = []
+coinbase_differences = []
+basefees = []
+for i in range(10):
+    bundle = Matrix(6, 4, sfix)
+    for j in range(6):
+        bundle[j] = sfix._new(sint.get_input_from(i, size=4))
+        #print_ln("%s", bundle[j].reveal())
+    coinbase_difference = sfix.get_input_from(i)
+    basefee = sfix.get_input_from(i)
+    bundles.append([bundle, coinbase_difference, basefee])
+
+scores = score_all_bundles(bundles, mempool)
+for score in scores:
+    print_ln("score: %s", score)
