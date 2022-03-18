@@ -1,3 +1,6 @@
 [submodule "MP-SPDZ"]
 	path = MP-SPDZ
 	url = https://github.com/data61/MP-SPDZ
+[submodule "evm2mpc/mininimbus/vendor/nim-eth"]
+	path = evm2mpc/mininimbus/vendor/nim-eth
+	url = git@github.com:status-im/nim-eth.git
