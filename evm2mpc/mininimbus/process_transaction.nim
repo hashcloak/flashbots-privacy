@@ -15,7 +15,7 @@ import
   ./transaction/call_evm,
   ./vm_state,
   ./vm_types,
-  ../validate,
+  ./validate,
   ./executor_helpers,
   chronicles,
   eth/common,
@@ -112,8 +112,8 @@ proc processTransactionImpl(
           debug "state clearing", account
           db.deleteAccount(account)
 
-  if vmState.generateWitness:
-    vmState.stateDB.collectWitnessData()
+  ## if vmState.generateWitness:
+  ##  vmState.stateDB.collectWitnessData()
   vmState.stateDB.persist(clearCache = false)
 
 # ------------------------------------------------------------------------------

@@ -88,8 +88,8 @@ proc procBlkEpilogue(vmState: BaseVMState;
     {.gcsafe, raises: [Defect,RlpError].} =
   # Reward beneficiary
   vmState.mutateStateDB:
-    if vmState.generateWitness:
-      db.collectWitnessData()
+    ## if vmState.generateWitness:
+    ##  db.collectWitnessData()
     db.persist(ClearCache in vmState.flags)
 
   let stateDb = vmState.stateDB
@@ -158,7 +158,7 @@ proc processBlockNotPoA*(
 
 proc processBlock*(
     vmState: BaseVMState;  ## Parent environment of header/body block
-    poa:     Clique;       ## PoA descriptor (if needed, at all)
+    ## poa:     Clique;       ## PoA descriptor (if needed, at all)
     header:  BlockHeader;  ## Header/body block to add to the blockchain
     body:    BlockBody): ValidationResult
     {.gcsafe, raises: [Defect,CatchableError].} =
