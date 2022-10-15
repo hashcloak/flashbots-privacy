@@ -1,0 +1,4 @@
+No modulus found in Player-Data/3-MSp-128/Params-Data, generating 128-bit prime
+terminate called after throwing an instance of 'std::runtime_error'
+  what():  Cannot access Player-DataP0.pem. Have you set up SSL?
+You can use `Scripts/setup-ssl.sh <nparties>`.

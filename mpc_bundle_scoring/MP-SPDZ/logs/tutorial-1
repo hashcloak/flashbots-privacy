@@ -1,0 +1,7 @@
+No modulus found in Player-Data/2-p-128/Params-Data, generating 128-bit prime
+Time = 2.14832 seconds 
+Data sent = 223.888 MB in ~692 rounds (party 1)
+Global data sent = 447.776 MB (all parties)
+This program might benefit from some protocol options.
+Consider adding the following at the beginning of 'tutorial.mpc':
+	program.use_edabit(True)

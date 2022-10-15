@@ -1,0 +1,1 @@
+../mpn/generic/perfect_square_p.c

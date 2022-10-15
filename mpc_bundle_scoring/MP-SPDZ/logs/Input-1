@@ -1,0 +1,80 @@
+ERROR: incorrect number of arguments to /home/mikerah/Documents/HashCloak/Projects/flashbots-privacy/MP-SPDZ/Scripts/../shamir-party.x
+Arguments given were:
+'1'
+'Input'
+'bundle_scoring'
+
+
+USAGE: /home/mikerah/Documents/HashCloak/Projects/flashbots-privacy/MP-SPDZ/Scripts/../shamir-party.x [OPTIONS] [<playerno>] <progname>
+
+OPTIONS:
+
+-B, --bucket-size ARG            Batch size for sacrifice (3-5, default: 4)
+
+-b, --batch-size ARG             Size of preprocessing batches (default: 10000)
+
+-d, --direct                     Direct communication instead of star-shaped
+                                 (only for dishonest-majority protocols)
+
+-ext-server, --external-server   Use external server. Default is to coordinate
+                                 through player 0.
+
+-F, --file-preprocessing         Preprocessing from files
+
+-f, --file-prep-per-thread       Preprocessing from files by thread (use with
+                                 pipes)
+
+-h, --hostname ARG               Host where Server.x or party 0 is running to
+                                 coordinate startup (default: localhost).
+                                 Ignored if --ip-file-name is used.
+
+-I, --interactive                Interactive mode in the main thread (default:
+                                 disabled)
+
+-IF, --input-file ARG            Prefix for input file path (default:
+                                 Player-Data/Private-Input). Input will be read
+                                 from {prefix}-P{id}-{thread_id}.
+
+-ip, --ip-file-name ARG          Filename containing list of party ip addresses.
+                                 Alternative to --hostname and running Server.x
+                                 for startup coordination.
+
+-lg2, --lg2 ARG                  Bit length of GF(2^n) field (default: 128)
+
+-lgp, --lgp ARG                  Bit length of GF(p) field (default: 128)
+
+-m, --memory ARG                 Where to obtain memory, old|empty (default:
+                                 empty)
+                                 	old: reuse previous memory in
+                                 Memory-<type>-P<i>
+                                 	empty: create new empty memory
+
+-mp, --my-port ARG               Port to listen on (default: port number base +
+                                 player number)
+
+-N, --nparties ARG               Number of players
+
+-OF, --output-file ARG           Prefix for output file path (default: output to
+                                 stdout for party 0 (silent otherwise unless
+                                 interactive mode is active). Output will be
+                                 written to {prefix}-P{id}-{thread_id}. Use '.'
+                                 for stdout on all parties.
+
+-P, --prime ARG                  Prime for GF(p) field (default: read from file
+                                 or generated from -lgp argument)
+
+-p, --player ARG                 This player's number (required if not given
+                                 before program name)
+
+-pn, --portnumbase ARG           Port number base to attempt to start
+                                 connections from (default: 5000)
+
+-Q, --bits-from-squares          Compute random bits from squares
+
+-T, --threshold ARG              Number of corrupted parties (default: just
+                                 below half)
+
+-u, --unencrypted                Unencrypted communication.
+
+-v, --verbose                    Verbose output
+

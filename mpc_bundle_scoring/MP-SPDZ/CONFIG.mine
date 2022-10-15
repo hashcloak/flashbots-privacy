@@ -1,0 +1,12 @@
+MY_CFLAGS += -I./local/include
+MY_LDLIBS += -Wl,-rpath -Wl,/home/mikerah/Documents/HashCloak/Projects/flashbots-privacy/MP-SPDZ/local/lib -L/home/mikerah/Documents/HashCloak/Projects/flashbots-privacy/MP-SPDZ/local/lib
+MY_CFLAGS += -I./local/include
+MY_LDLIBS += -Wl,-rpath -Wl,/home/mikerah/Documents/HashCloak/Projects/flashbots-privacy/MP-SPDZ/local/lib -L/home/mikerah/Documents/HashCloak/Projects/flashbots-privacy/MP-SPDZ/local/lib
+MY_CFLAGS += -I./local/include
+MY_LDLIBS += -Wl,-rpath -Wl,/home/mikerah/Documents/HashCloak/Projects/flashbots-privacy/MP-SPDZ/local/lib -L/home/mikerah/Documents/HashCloak/Projects/flashbots-privacy/MP-SPDZ/local/lib
+MY_CFLAGS += -I./local/include
+MY_LDLIBS += -Wl,-rpath -Wl,/home/mikerah/Documents/HashCloak/Projects/flashbots-privacy/MP-SPDZ/local/lib -L/home/mikerah/Documents/HashCloak/Projects/flashbots-privacy/MP-SPDZ/local/lib
+MY_CFLAGS += -I./local/include
+MY_LDLIBS += -Wl,-rpath -Wl,/home/mikerah/Documents/HashCloak/Projects/flashbots-privacy/MP-SPDZ/local/lib -L/home/mikerah/Documents/HashCloak/Projects/flashbots-privacy/MP-SPDZ/local/lib
+MY_CFLAGS += -I./local/include
+MY_LDLIBS += -Wl,-rpath -Wl,/home/mikerah/Documents/HashCloak/Projects/flashbots-privacy/MP-SPDZ/local/lib -L/home/mikerah/Documents/HashCloak/Projects/flashbots-privacy/MP-SPDZ/local/lib

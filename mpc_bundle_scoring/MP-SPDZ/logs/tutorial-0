@@ -1,0 +1,37 @@
+No modulus found in Player-Data/2-p-128/Params-Data, generating 128-bit prime
+got 1 from player 0
+got 1 from player 1
+expected 3, got 3
+expected 2, got 2
+expected -1, got -1
+expected 2, got 1
+expected 1, got 1
+expected 1, got 1
+expected 0, got 0
+expected 0, got 0
+expected 0, got 0
+expected 1, got 1
+expected 2, got 2
+expected 9702, got 9702
+expected 1.9, got 1.9
+expected 2.1, got 2.1
+expected -0.2, got -0.2
+expected -20, got -20
+expected 0, got 0
+expected 0, got 0
+expected 1, got 1
+expected 1, got 1
+expected 0, got 0
+expected 1, got 1
+expected -0.1, got -0.1
+Party 0: please input three numbers not adding up to zero
+Party 1: please input any three numbers
+weighted average: 3.222
+expected 2, got 2
+expected 3, got 3
+Time = 2.14609 seconds 
+Data sent = 223.888 MB in ~692 rounds (party 0)
+Global data sent = 447.776 MB (all parties)
+This program might benefit from some protocol options.
+Consider adding the following at the beginning of 'tutorial.mpc':
+	program.use_edabit(True)

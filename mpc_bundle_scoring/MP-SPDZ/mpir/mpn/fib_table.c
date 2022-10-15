@@ -1,0 +1,1 @@
+../mpn/generic/fib_table.c
