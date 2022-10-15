@@ -1,3 +1,6 @@
 [submodule "MP-SPDZ"]
 	path = MP-SPDZ
 	url = https://github.com/data61/MP-SPDZ
+[submodule "mpc_block_knapsack/MP-SPDZ"]
+	path = mpc_block_knapsack/MP-SPDZ
+	url = git@github.com:data61/MP-SPDZ.git
