@@ -1,6 +1,7 @@
 import sys
 sys.path.append("../MP-SPDZ")
 from Compiler.oram import OptimalORAM
+from Compiler.types import _single
 
 values = OptimalORAM(10)
 weights = OptimalORAM(10)
@@ -17,6 +18,7 @@ m = MultiArray([n, W], sint, address=space.address)
 def _(i):
     @for_range(1, W)
     def _(j):
-        (weights[i] > j).if_else(m[i][j] = (m[i-1][j]), m[i][j] = (m[i-1][j].max(m[i-1][j - weights[i]] + values[i])))
+        m[i][j] = (weights[i] > j).if_else(m[i-1][j], m[i-1][j].max(m[i-1][j - weights[i]] + values[i]))
+
 
 print_ln(m[n][W].reveal_list())
