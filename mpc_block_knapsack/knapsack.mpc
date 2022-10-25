@@ -1,18 +1,22 @@
 import sys
 sys.path.append("../MP-SPDZ")
 from Compiler.oram import OptimalORAM
-from Compiler.types import _single
+from Compiler.types import cint
 
 values = OptimalORAM(10)
 weights = OptimalORAM(10)
 for i in range(10):
-    values[i] = sint.get_input_from(0)
-    weights[i] = sint.get_input_from(0)
+    #print(isinstance(sint.get_input_from(0), sint))
+    values[i] = sbitvec.get_type(1000).get_input_from(0)
+    weights[i] = sbitvec.get_type(1000).get_input_from(0)
+
 # Is currently a clear integer. In a real world deployment, it should be a secret-shared integer. Problem is that you can't loop over secret-shared integers
 n = public_input()
 W = public_input()
-space = MultiArray([1000, 1000], sint)
-m = MultiArray([n, W], sint, address=space.address)
+# space = MultiArray([1000, 1000], sint)
+# m = MultiArray([n, W], sint, address=space.address)
+size = n*W
+m = OptimalORAM(1000*1000)
 
 @for_range(1, n)
 def _(i):
