@@ -34,4 +34,4 @@ def _(i):
         m[i*1000+j] = (condition).if_else(outcome1, outcome2)
 
 
-print_ln(m[n*1000+W])
+print_ln("%s", m[regint(n*1000+W)].reveal())
