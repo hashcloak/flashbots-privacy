@@ -29,3 +29,18 @@ def _(i):
 
 
 print_ln("%s", m[regint(n*1000+W)].reveal())
+
+array_of_indices = []
+
+tmp_weight = m[regint((n*1000)+W)]
+
+@for_range(1, n)
+def _(i):
+    global tmp_weight
+    current_value = m[regint(i*1000+W)]
+    previous_value = m[regint((i-1)*1000+W)]
+    condition = current_value > previous_value
+    array_of_indices.append(condition.if_else(sbit(i), sbit(i-1)))
+    tmp_weight = condition.if_else(tmp_weight - weights[i], tmp_weight)
+
+print_ln("items: " + " ".join([str(x.reveal()) for x in array_of_indices]))    
