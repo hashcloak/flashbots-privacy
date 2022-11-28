@@ -6,13 +6,14 @@ from Compiler.types import cint
 values = OptimalORAM(10)
 weights = OptimalORAM(10)
 for i in range(10):
-    values[i] = sbitvec.get_type(1000).get_input_from(0)
-    weights[i] = sbitvec.get_type(1000).get_input_from(0)
+    values[i] = sbitvec.get_type(1000).get_input_from(i)
+    weights[i] = sbitvec.get_type(1000).get_input_from(i)
 
 # Is currently a clear integer. In a real world deployment, it should be a secret-shared integer. Problem is that you can't loop over secret-shared integers
 n = public_input()
 W = public_input()
 size = n*W
+# Some arbitrarily high number to initialize the ORAM array with. In practice, this should be exactly of size n*W.
 m = OptimalORAM(1000*1000)
 
 @for_range(1, n)
