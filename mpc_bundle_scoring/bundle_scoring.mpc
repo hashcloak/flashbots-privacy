@@ -1,7 +1,7 @@
 # Pseudo-code.
 # TBD how to handle this practically 
 import sys
-sys.path.append("../flashbots_mpc")
+sys.path.append("../mpc_bundle_scoring")
 import flashbots_types
 import util
 
