@@ -17,10 +17,27 @@ def max_knapsack(values, weights, W, n):
             outcome2 = m[(i-1)*(W+1) + j].max(m[(i-1)*(W+1)+(j-weights[i-1]) + values[i-1]])
             m[i * (W+1) + j] = condition.if_else(outcome1, outcome2)
 
-    return m[(n+1)*(W+1)+(W+1)]
+    return (m[(n+1)*(W+1)+(W+1)], m)
 
-def knapsack_subset():
-    pass
+def knapsack_subset(index_i, index_j, m, weights):
+    subset = OptimalORAM(3)
+    W = index_j
+    if index_i == 0:
+        return
+    counter = MemValue(0)
+    while (index_i != 0):
+        subset[counter] = (m[index_i * (W+1)+index_j] > m[(index_i-1)*(W+1) + (index_j - weights[index_i])]).if_else(index_i, subset[counter])
+        
+        """
+        @if_(m[index_i * (W+1)+index_j] > m[(index_i-1)*(W+1) + (index_j - weights[index_i])])
+        def _():
+            subset[counter] = index_i
+        """
+
+        counter += 1
+        index_i -= 1
+
+        
 
 values = OptimalORAM(size=3)
 values[0] = 60
@@ -34,8 +51,12 @@ weights[2] = 30
 
 W = 50
 n = 3
-knapsack_val = max_knapsack(values, weights, W, n)
+knapsack_val, m = max_knapsack(values, weights, W, n)
+knapsack_subset = knapsack_subset(n, W, m, weights)
 print_ln("Maximal knapsack value: %s", knapsack_val.reveal())
+@for_range(knapsack_subset.size)
+def _(i):
+    print_ln("Corresponding knapsack set index %s", knapsack_subset[i].reveal())
 
 
 """
