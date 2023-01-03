@@ -3,6 +3,44 @@ sys.path.append("../MP-SPDZ")
 from Compiler.oram import OptimalORAM
 from Compiler.types import cint
 
+def max_knapsack(values, weights, W, n):
+    size = n*W
+    # Some arbitrarily high number to initialize the ORAM array with. In practice, this should be exactly of size n*W.
+    m = OptimalORAM((n+1)*(W+1))
+
+    @for_range(n+1)
+    def _(i):
+        @for_range(W+1)
+        def _(j):
+            condition = weights[i-1] > j
+            outcome1 = m[(i-1)*(W+1) + j]
+            outcome2 = m[(i-1)*(W+1) + j].max(m[(i-1)*(W+1)+(j-weights[i-1]) + values[i-1]])
+            m[i * (W+1) + j] = condition.if_else(outcome1, outcome2)
+
+    return m[(n+1)*(W+1)+(W+1)]
+
+def knapsack_subset():
+    pass
+
+values = OptimalORAM(size=3)
+values[0] = 60
+values[1] = 100
+values[2] = 120
+
+weights = OptimalORAM(size=3)
+weights[0] = 10
+weights[1] = 20
+weights[2] = 30
+
+W = 50
+n = 3
+knapsack_val = max_knapsack(values, weights, W, n)
+print_ln("Maximal knapsack value: %s", knapsack_val.reveal())
+
+
+"""
+print_ln("%s", m[regint(n*1000+W)].reveal())
+
 values = OptimalORAM(10)
 weights = OptimalORAM(10)
 for i in range(10):
@@ -45,3 +83,4 @@ def _(i):
     tmp_weight = condition.if_else(tmp_weight - weights[i], tmp_weight)
 
 print_ln("items: " + " ".join([str(x.reveal()) for x in array_of_indices]))    
+"""
