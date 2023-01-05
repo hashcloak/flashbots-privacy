@@ -12,12 +12,17 @@ def max_knapsack(values, weights, W, n):
     def _(i):
         @for_range(W+1)
         def _(j):
-            condition = weights[i-1] > j
-            outcome1 = m[(i-1)*(W+1) + j]
-            outcome2 = m[(i-1)*(W+1) + j].max(m[(i-1)*(W+1)+(j-weights[i-1]) + values[i-1]])
-            m[i * (W+1) + j] = condition.if_else(outcome1, outcome2)
+            @if_e((i == 0).bit_or(j == 0))
+            def _():
+                m[i*(W+1) + j] = 0
+            @else_
+            def _():
+                condition = weights[i-1] > j
+                outcome1 = m[(i-1)*(W+1) + j]
+                outcome2 = m[(i-1)*(W+1) + j].max(m[(i-1)*(W+1)+(j-weights[i-1])] + values[i-1])
+                m[i * (W+1) + j] = condition.if_else(outcome1, outcome2)
 
-    return (m[(n+1)*(W+1)+(W+1)], m)
+    return (m[(n)*(W+1)+(W)], m)
 
 def knapsack_subset(index_i, index_j, m, weights):
     subset = OptimalORAM(3)
@@ -26,16 +31,12 @@ def knapsack_subset(index_i, index_j, m, weights):
         return
     counter = MemValue(0)
     while (index_i != 0):
-        subset[counter] = (m[index_i * (W+1)+index_j] > m[(index_i-1)*(W+1) + (index_j - weights[index_i])]).if_else(index_i, subset[counter])
-        
-        """
-        @if_(m[index_i * (W+1)+index_j] > m[(index_i-1)*(W+1) + (index_j - weights[index_i])])
-        def _():
-            subset[counter] = index_i
-        """
+        subset[counter] = (m[index_i * (W+1)+index_j] > m[(index_i-1)*(W+1) + index_j]).if_else(index_i, subset[counter])
 
         counter += 1
         index_i -= 1
+
+    return subset
 
         
 
