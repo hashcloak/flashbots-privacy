@@ -1,44 +1,51 @@
 
 sfix.round_nearest = True
+cfix.set_precision(f=16, k=80)
 sfix.set_precision(f=16, k=80)
 
 class Bidder:
     def __init__(self, id, bid, block_space):
         self.bidder_id = id
-        self.bid = sint(bid)
-        self.wanted_block_space = sint(block_space)
+        self.bid = sfix(bid)
+        self.wanted_block_space = sfix(block_space)
         self.factor = sfix(self.bid/self.wanted_block_space)
 
 def knapsack_auction(bidders, max_block_space):
     highest_bidder = bidders[0]
     actual_capacity_of_solution = 0
     actual_solution = []
+    counter = 0
 
     while actual_capacity_of_solution < max_block_space:
-        current_bidder = next(bidder)
-        if current_bidder.wanted_block_space <= max_block_space:
+        current_bidder = bidders[counter]
+        if current_bidder[2] <= max_block_space:
+            actual_capacity_of_solution += current_bidder[2]
             actual_solution.append(current_bidder)
-            actual_capacity_of_solution += current_bidder.wanted_block_space
+        counter += 1
 
-    if highest_bidder.wanted_block_space > actual_capacity_of_solution:
+    if highest_bidder[2] > actual_capacity_of_solution:
         return highest_bidder
     else:
         return actual_solution
 
-bidders = (sfix.Matrix(size=10), [])
+bidders = []
 for i in range(10):
-    bid = sint.get_input_from(i)
-    block_space = sint.get_input_from(i)
-    bidder = Bidder(bid, block_space)
-    bidders[0][i] = 
-    bidders[1].append(bidder)
+    bid = sfix.get_input_from(i)
+    block_space = sfix.get_input_from(i)
+    bidder = Bidder(i, bid, block_space)
+    bidders.append(bidder)
 
-bidders.sort(key=lambda bidder: bidder.factor, reverse=True)
+bidder_matrix = sfix.Matrix(10, 4)
+for i in range(10):
+    bidder = bidders[i]
+    bidder_matrix[i] = (bidder.bidder_id, bidder.bid, bidder.wanted_block_space, bidder.factor)
 
-knapsack_auction_sol = knapsack_auction(bidders, 30000000)
+bidder_matrix.sort()
+
+knapsack_auction_sol = knapsack_auction(bidder_matrix, 30000000)
 if type(knapsack_auction_sol) == list:
     print_ln("Knapsack Auction Winners:")
     for bidder in knapsack_auction_sol:
-        print_ln("%s %s", bidder.bid.reveal(), bidder.wanted_block_space.reveal())
+        print_ln("%s %s %s", bidder[0].reveal(), bidder[1].reveal(), bidder[2].reveal())
 else:
-    print_ln("Winner is bidder with bid %s and wanted block space %s", knapsack_auction_sol.bid.reveal(), knapsack_auction_sol.wanted_block_space.reveal())
+    print_ln("Winner is bidder %s with bid %s and wanted block space %s", knapsack_auction_sol[0].reveal(), knapsack_auction_sol[1].reveal(), knapsack_auction_sol[2].reveal())
