@@ -1,11 +1,10 @@
 import sys
 sys.path.append("../MP-SPDZ")
 from Compiler.oram import OptimalORAM
-from Compiler.types import cint
+from Compiler.types import cfix
 
 def max_knapsack(values, weights, W, n):
     size = n*W
-    # Some arbitrarily high number to initialize the ORAM array with. In practice, this should be exactly of size n*W.
     m = OptimalORAM((n+1)*(W+1))
 
     @for_range(n+1)
@@ -39,7 +38,7 @@ def knapsack_subset(index_i, index_j, m, weights):
     return subset
 
         
-
+"""
 values = OptimalORAM(size=3)
 values[0] = 60
 values[1] = 100
@@ -52,6 +51,23 @@ weights[2] = 30
 
 W = 50
 n = 3
+"""
+
+W = cfix(public_input())
+# Ideally, n should be a secret-shared value as we typically don't know upfront how many txs are yet to be included in a block.
+# This is just to get around MP-SPDZ limitations
+n = public_input()
+
+values_tmp = []
+weights_tmp = []
+
+for i in range(10):
+    values_tmp.append(sfix.get_input_from(i, size=n))
+    weights_tmp.append(sfix.get_input_from(i, size=n))
+
+values = Array.create_from(values_tmp)
+weights = Array.create_from(weights_tmp)
+
 knapsack_val, m = max_knapsack(values, weights, W, n)
 knapsack_subset = knapsack_subset(n, W, m, weights)
 print_ln("Maximal knapsack value: %s", knapsack_val.reveal())

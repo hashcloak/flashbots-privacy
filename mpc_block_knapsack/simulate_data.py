@@ -1,11 +1,11 @@
 import knapsack
 import random
 
-def generate_random_knapsack():
+def generate_random_knapsack(f=16):
     W = 30000000
     n = random.randint(1,301)
-    values = [random.uniform(0, 3000001) for i in range(n)]
-    weights = [random.randrange(21000, 3000001) for i in range(n)]
+    values = [round(random.uniform(0, 3000001) * (2**f)) for i in range(n)]
+    weights = [round(random.randrange(21000, 3000001) * (2**f)) for i in range(n)]
     return (W, n , values, weights)
 
 def chunks(lst, n):
@@ -45,8 +45,8 @@ def expected_knapsack_max():
     return knapsack.knapsack(n, W, values, weights)
 
 if __name__ == '__main__':
-    #generate_data_files()
-    knapsack_max = expected_knapsack_max()
-    print(knapsack_max)
+    generate_data_files()
+    #knapsack_max = expected_knapsack_max()
+    #print(knapsack_max)
 
             
