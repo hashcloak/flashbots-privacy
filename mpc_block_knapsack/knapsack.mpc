@@ -56,14 +56,14 @@ n = 3
 W = cfix(public_input())
 # Ideally, n should be a secret-shared value as we typically don't know upfront how many txs are yet to be included in a block.
 # This is just to get around MP-SPDZ limitations
-n = cfix(public_input())
+n = public_input()
 
 values_tmp = []
 weights_tmp = []
 
 for i in range(10):
-    values_tmp.append(sfix._new(sint.get_input_from(i, size=n)))
-    weights_tmp.append(sfix._new(sint.get_input_from(i, size=n)))
+    values_tmp.append(sfix.get_input_from(i, size=n))
+    weights_tmp.append(sfix.get_input_from(i, size=n))
 
 values = Array.create_from(values_tmp)
 weights = Array.create_from(weights_tmp)
