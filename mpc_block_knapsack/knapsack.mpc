@@ -53,7 +53,8 @@ W = 50
 n = 3
 """
 
-W = cfix(public_input())
+# Ideally, W should be secret-shared but due to MP-SPDZ limitations, need it to be a compile time constant
+W = 30000000
 # Ideally, n should be a secret-shared value as we typically don't know upfront how many txs are yet to be included in a block.
 # This is just to get around MP-SPDZ limitations around compile time sizes
 n = 34
@@ -62,11 +63,11 @@ values_tmp = []
 weights_tmp = []
 
 for i in range(10):
-    values_tmp.append(sfix.get_input_from(i, size=n))
-    weights_tmp.append(sfix.get_input_from(i, size=n))
+    values_tmp.extend(sfix.get_input_from(i, size=n))
+    weights_tmp.extend(sfix.get_input_from(i, size=n))
 
-values = Array.create_from(values_tmp)
-weights = Array.create_from(weights_tmp)
+values = Array(n, sfix).create_from(values_tmp)
+weights = Array(n, sfix).create_from(weights_tmp)
 
 knapsack_val, m = max_knapsack(values, weights, W, n)
 knapsack_subset = knapsack_subset(n, W, m, weights)
