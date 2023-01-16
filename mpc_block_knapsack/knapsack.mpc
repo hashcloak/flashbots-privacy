@@ -55,8 +55,8 @@ n = 3
 
 W = cfix(public_input())
 # Ideally, n should be a secret-shared value as we typically don't know upfront how many txs are yet to be included in a block.
-# This is just to get around MP-SPDZ limitations
-n = public_input()
+# This is just to get around MP-SPDZ limitations around compile time sizes
+n = 34
 
 values_tmp = []
 weights_tmp = []
