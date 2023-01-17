@@ -21,7 +21,7 @@ def knapsack_auction(bidders, max_block_space, highest_bidder):
     def _(i):
         current_bidder = bidders[i]
         actual_solution.append(current_bidder)  
-        actual_capacity_of_solution += current_bidder[2]
+        actual_capacity_of_solution.iadd(current_bidder[2])
         return i+1
 
     surplus = 0
