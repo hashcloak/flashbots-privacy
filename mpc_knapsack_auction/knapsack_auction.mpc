@@ -26,12 +26,13 @@ def knapsack_auction(bidders, max_block_space, highest_bidder):
         return i+1
 
     surplus = 0
+    print(type(highest_bidder))
     for winner in actual_solution:
         surplus += winner[1]
-    if highest_bidder > surplus:
-        return highest_bidder
-    else:
-        return actual_solution
+    
+    actual_solution = Array(len(actual_solution), sfix).create_from(actual_solution)
+
+    return (highest_bidder[1] > surplus).if_else(highest_bidder, actual_solution)
 
 bidders = []
 for i in range(10):
