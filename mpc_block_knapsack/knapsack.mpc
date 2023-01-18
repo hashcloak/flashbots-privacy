@@ -18,7 +18,7 @@ def max_knapsack(values, weights, W, n):
             def _():
                 condition = weights[i-1] > j
                 outcome1 = m[(i-1)*(W+1) + j]
-                outcome2 = m[(i-1)*(W+1) + j].max(m[(i-1)*(W+1)+(j-weights[i-1])] + values[i-1])
+                outcome2 = sfix(m[(i-1)*(W+1) + j]).max(m[(i-1)*(W+1)+(j-weights[i-1])] + values[i-1])
                 m[i * (W+1) + j] = condition.if_else(outcome1, outcome2)
 
     return (m[(n)*(W+1)+(W)], m)
