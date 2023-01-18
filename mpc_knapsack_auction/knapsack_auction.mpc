@@ -10,8 +10,8 @@ class Bidder:
         self.wanted_block_space = sfix(block_space)
         self.factor = sfix(self.bid/self.wanted_block_space)
 
-def knapsack_auction(bidders, max_block_space, highest_bidder):
-    actual_capacity_of_solution = MemValue(0)
+def knapsack_auction(bidders, max_block_space, highest_bidder): 
+    actual_capacity_of_solution = MemValue(sfix(0))
     actual_solution = []
     #global counter
     #counter = MemValue(0)
@@ -19,6 +19,7 @@ def knapsack_auction(bidders, max_block_space, highest_bidder):
 
     @while_do(lambda x: x < n_bidders, regint(0))
     def _(i):
+        #nonlocal actual_capacity_of_solution
         current_bidder = bidders[i]
         actual_solution.append(current_bidder)  
         actual_capacity_of_solution.iadd(current_bidder[2])
@@ -27,6 +28,7 @@ def knapsack_auction(bidders, max_block_space, highest_bidder):
     surplus = 0
     for winner in actual_solution:
         surplus += winner[1]
+        
     if highest_bidder > surplus:
         return highest_bidder
     else:
