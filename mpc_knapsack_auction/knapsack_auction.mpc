@@ -11,11 +11,7 @@ class Bidder:
         self.factor = sfix(self.bid/self.wanted_block_space)
 
 def knapsack_auction(bidders, max_block_space, highest_bidder): 
-<<<<<<< HEAD
     actual_capacity_of_solution = MemValue(sfix(0))
-=======
-    actual_capacity_of_solution = MemValue(0)
->>>>>>> d586a0f (Fixed compiler error sfix cannot be converted to integer)
     actual_solution = []
     #global counter
     #counter = MemValue(0)
@@ -23,11 +19,7 @@ def knapsack_auction(bidders, max_block_space, highest_bidder):
 
     @while_do(lambda x: x < n_bidders, regint(0))
     def _(i):
-<<<<<<< HEAD
         #nonlocal actual_capacity_of_solution
-=======
-        nonlocal actual_capacity_of_solution
->>>>>>> d586a0f (Fixed compiler error sfix cannot be converted to integer)
         current_bidder = bidders[i]
         actual_solution.append(current_bidder)  
         actual_capacity_of_solution = actual_capacity_of_solution + current_bidder[2]
@@ -36,26 +28,10 @@ def knapsack_auction(bidders, max_block_space, highest_bidder):
     surplus = 0
     print(type(highest_bidder))
     for winner in actual_solution:
-        surplus += winner[1]
-<<<<<<< HEAD
-<<<<<<< HEAD
-        
-    if highest_bidder > surplus:
-        return highest_bidder
-    else:
-        return actual_solution
-=======
-=======
->>>>>>> 731dd4c3a6410d60c86e61ebbc537fd61cea6d32
-    
+        surplus += winner[1]    
     actual_solution = Array(len(actual_solution), sfix).create_from(actual_solution)
-
     return (highest_bidder[1] > surplus).if_else(highest_bidder, actual_solution)
-<<<<<<< HEAD
->>>>>>> 731dd4c (Added bug on line 33)
-=======
->>>>>>> 731dd4c3a6410d60c86e61ebbc537fd61cea6d32
-
+    
 bidders = []
 for i in range(10):
     bid = sfix.get_input_from(i)
