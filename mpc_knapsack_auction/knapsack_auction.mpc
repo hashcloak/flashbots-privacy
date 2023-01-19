@@ -28,11 +28,15 @@ def knapsack_auction(bidders, max_block_space, highest_bidder):
     surplus = 0
     for winner in actual_solution:
         surplus += winner[1]
-        
-    if highest_bidder > surplus:
-        return highest_bidder
-    else:
-        return actual_solution
+
+    @if_e(highest_bidder[1].reveal() > surplus.reveal())
+    def _():
+        print_ln("Winner is bidder %s with bid %s and wanted block space %s", highest_bidder[0].reveal(), highest_bidder[1].reveal(), highest_bidder[2].reveal())
+    @else_
+    def _():
+        print_ln("Knapsack Auction Winners:")
+        for bidder in actual_solution:
+            print_ln("%s %s %s", bidder[0].reveal(), bidder[1].reveal(), bidder[2].reveal())
 
 bidders = []
 for i in range(10):
@@ -52,10 +56,4 @@ for bidder in bidders:
 bidder_matrix.sort()
 highest_bidder = bidder_matrix[0]
 
-knapsack_auction_sol = knapsack_auction(bidder_matrix,30000000,highest_bidder)
-if type(knapsack_auction_sol) == list:
-    print_ln("Knapsack Auction Winners:")
-    for bidder in knapsack_auction_sol:
-        print_ln("%s %s %s", bidder[0].reveal(), bidder[1].reveal(), bidder[2].reveal())
-else:
-    print_ln("Winner is bidder %s with bid %s and wanted block space %s", knapsack_auction_sol[0].reveal(), knapsack_auction_sol[1].reveal(), knapsack_auction_sol[2].reveal())
+knapsack_auction(bidder_matrix,30000000,highest_bidder)
