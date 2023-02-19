@@ -14,7 +14,7 @@ cd MP-SPDZ
 ```
 ### Choice of which MPC protocol to run
 For this experiment, we used a malicious shamir protocol as it is one of the most efficient protocol in the malicious, honest majority settings and
-it's a reasonable model for the flashbots setting. You can compile via running `make mal-shamir` after running the [MP-SPDZ installation instructions](https://theory.stanford.edu/~gagan/papers/knapsack_SODA06.pdf).
+it's a reasonable model for the flashbots setting. You can compile via running `make mal-shamir` after running the [MP-SPDZ installation instructions](https://github.com/data61/MP-SPDZ#tldr-binary-distribution-on-linux-or-source-distribution-on-macos).
 However, there are other potential reasonable MPC settings for this as well. Read the [MP-SPDZ README](https://github.com/data61/MP-SPDZ#preface) to learn more about decide which setting you'd like to try.
 
 ## Running the computation
