@@ -10,7 +10,7 @@ It is a kind of variant of the original [knapsack problem](https://en.wikipedia.
 cd mpc_knapsack_auction
 git submodule init
 cd MP-SPDZ
-./compile ./knapsack_auction.mpc
+./compile ./knapsack_auction.mpc (or compile -C for more optimizations)
 ```
 ### Choice of which MPC protocol to run
 For this experiment, we used a malicious shamir protocol as it is one of the most efficient protocol in the malicious, honest majority settings and
@@ -21,5 +21,5 @@ However, there are other potential reasonable MPC settings for this as well. Rea
 ```
 python ../simulate_data.py
 ./Scripts/setup-ssl.sh 10
-./Scripts/mal-shamir.sh knapsack_auction -N 10 -IF ../Player-Data/
+PLAYERS=10 ./Scripts/mal-shamir.sh knapsack_auction -IF ../Player-Data/
 ```
