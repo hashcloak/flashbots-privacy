@@ -1,4 +1,5 @@
 
+program.use_edabit(True)
 sfix.round_nearest = True
 cfix.set_precision(f=16, k=80)
 sfix.set_precision(f=16, k=80)
@@ -13,14 +14,19 @@ class Bidder:
 def knapsack_auction(bidders, max_block_space, highest_bidder): 
     actual_capacity_of_solution = MemValue(sfix(0))
     actual_solution = []
+    #global counter
+    #counter = MemValue(0)
     n_bidders = bidders.sizes[0]
 
     @while_do(lambda x: x < n_bidders, regint(0))
     def _(i):
+        #nonlocal actual_capacity_of_solution
         current_bidder = bidders[i]
         actual_solution.append(current_bidder)  
-        actual_capacity_of_solution.iadd(current_bidder[2])
+        res = (actual_capacity_of_solution <= max_block_space).if_else(current_bidder[2], 0)
+        actual_capacity_of_solution.iadd(res)
         return i+1
+        
 
     surplus = 0
     for winner in actual_solution:
@@ -37,11 +43,8 @@ def knapsack_auction(bidders, max_block_space, highest_bidder):
 
 bidders = []
 for i in range(10):
-    #bid = sfix.get_input_from(i)
-    #block_space = sfix.get_input_from(i)
-    bid_info = sfix._new(sint.get_input_from(i, size=2))
-    bid = bid_info[0]
-    block_space = bid_info[1]
+    bid = sfix.get_input_from(i)
+    block_space = sfix.get_input_from(i)
     bidder = Bidder(i, bid, block_space)
     bidders.append(bidder)
 
