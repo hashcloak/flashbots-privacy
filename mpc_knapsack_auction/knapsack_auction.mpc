@@ -22,9 +22,10 @@ def knapsack_auction(bidders, max_block_space, highest_bidder):
     def _(i):
         #nonlocal actual_capacity_of_solution
         current_bidder = bidders[i]
-        actual_solution.append(current_bidder)  
-        res = (actual_capacity_of_solution <= max_block_space).if_else(current_bidder[2], 0)
-        actual_capacity_of_solution.iadd(res)
+        capacity_to_add = (actual_capacity_of_solution <= max_block_space).if_else(current_bidder[2], 0)
+        bidder_to_add = (actual_capacity_of_solution <= max_block_space).if_else(current_bidder, False)
+        actual_solution.append(bidder_to_add)
+        actual_capacity_of_solution.iadd(capacity_to_add)
         return i+1
         
 
@@ -39,7 +40,8 @@ def knapsack_auction(bidders, max_block_space, highest_bidder):
     def _():
         print_ln("Knapsack Auction Winners:")
         for bidder in actual_solution:
-            print_ln("%s %s %s", bidder[0].reveal(), bidder[1].reveal(), bidder[2].reveal())
+            if bidder is not False:
+                print_ln("%s %s %s", bidder[0].reveal(), bidder[1].reveal(), bidder[2].reveal())
 
 bidders = []
 for i in range(10):
