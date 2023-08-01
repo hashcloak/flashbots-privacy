@@ -61,4 +61,4 @@ for bidder in bidders:
 bidder_matrix.sort()
 highest_bidder = bidder_matrix[0]
 
-knapsack_auction(bidder_matrix, 10,highest_bidder)
+knapsack_auction(bidder_matrix, 30000000,highest_bidder)
