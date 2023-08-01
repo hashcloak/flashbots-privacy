@@ -21,7 +21,7 @@ def knapsack_auction(bidders, max_weight, highest_bidder):
     allocation_capacity = 0
     winning_bidders = []
 
-    while (allocation_capacity <= max_weight) and (current_bidder := next(bidders_iterator, None)):
+    while (current_bidder := next(bidders_iterator, None)) and (allocation_capacity + current_bidder.allocation <= max_weight):
         allocation_capacity += current_bidder.allocation
         winning_bidders.append(current_bidder)
 
