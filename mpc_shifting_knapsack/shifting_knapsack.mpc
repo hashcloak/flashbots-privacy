@@ -1,0 +1,10 @@
+def knapsack(weights, values, C, W):
+    pass
+
+
+def cyclic_shift(values, K, max_log_K):
+    pass
+
+
+def maybe_shift_by_k(enabled, values, K, i, j):
+    pass

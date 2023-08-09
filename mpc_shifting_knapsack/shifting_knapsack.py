@@ -24,23 +24,72 @@ def maybe_shift_by_k(enabled, values, K, i, j):
     K2 = (K - (N % K)) % K
 
     if K2 != 0:
-        maybe_shift_by_k(enabled, values, j - K, j)
+        maybe_shift_by_k(enabled, values, K2, j - K, j)
 
 
-def cyclic_shift(values, K, max_log_K):
+def is_base_case(K, start, end, n_values):
+    # Computations for the base case
+    assert start <= end
+    assert end <= n_values
+    assert start < n_values
+
+    N = end - start
+
+    K = K % N
+
+    return K == 0
+
+
+def maybe_shift_by_k_iter(enabled, values, K, i, j):
+    start = i
+    end = j
+
+    # Just assign K2 any non-zero value to do at least the first iteration and
+    # the condition of the while loop only depends on the base case.
+    K2 = 1
+
+    while not is_base_case(K, start, end, len(values)) and K2 != 0:
+        N = end - start
+        K = K % N
+
+        for l in range(N - K):
+            if enabled:
+                # Exchange variables
+                aux = values[start + ((l + K) % N)]
+                values[start + ((l + K) % N)] = values[start + l]
+                values[start + l] = aux
+
+        # Condition for next iteration
+        K2 = (K - (N % K)) % K
+
+        # Definition of subproblem
+        K = K2
+        start = end - K
+
+
+def cyclic_shift(values, K, max_log_K, recursive=True):
 
     # Applies obivious ciclic shift on an array of vals by an ammount of
     # max_log_K
     for i in range(max_log_K):
         should_mov = (K & (1 << max_log_K)) != 0
-        maybe_shift_by_k(should_mov, values, 1 << max_log_K)
+        if recursive:
+            maybe_shift_by_k(should_mov, values, 1 << max_log_K, 0,
+                             len(values))
+        else:
+            maybe_shift_by_k_iter(should_mov, values, 1 << max_log_K,
+                                  0, len(values))
         sK = K ^ (1 << max_log_K)
 
         if should_mov:
             K = sK
 
 
-def knapsack(weights, values, C, W):
+def knapsack(weights, values, C, recursive=True):
+    '''
+    The recursive param is to choose if solving the problem using the iterative
+    version or the recursive one.
+    '''
     N = len(weights)
     lwC = math.ceil(math.log2(C + 1)) + 1
     ret = 0
@@ -51,7 +100,7 @@ def knapsack(weights, values, C, W):
         for j in range(C + 1):
             dp[i % 2][j] = dp[(i + 1) % 2][j]
 
-        cyclic_shift(values[(i + 1) % 2], C + 1 - weights[i], lwC)
+        cyclic_shift(dp[(i + 1) % 2], C + 1 - weights[i], lwC, recursive)
 
         for j in range(C + 1):
             opt2 = dp[(i + 1) % 2][j] + values[i]
@@ -67,3 +116,16 @@ def knapsack(weights, values, C, W):
 
     return ret
 
+
+if __name__ == "__main__":
+    n = int(input("Enter n, number of distinct items: "))
+    W = int(input("Enter W, knapsack capacity: "))
+    values = list(map(int, input("Knapsack values: ").strip().split()))
+    weights = list(map(int, input("Knapsack weights: ").strip().split()))
+
+    max_val = knapsack(weights, values, W)
+
+    max_val_iter = knapsack(weights, values, W, recursive=False)
+
+    print("Max value: ", max_val)
+    print("Max value iterative", max_val_iter)
