@@ -68,9 +68,6 @@ def maybe_shift_by_k_iter(enabled, values, K, i, j):
 
 
 def cyclic_shift(values, K, max_log_K, recursive=True):
-    
-    print("K starting:", K)
-
     # Applies obivious ciclic shift on an array of vals by an ammount of
     # max_log_K
     for i in range(max_log_K):
@@ -83,7 +80,6 @@ def cyclic_shift(values, K, max_log_K, recursive=True):
                                   0, len(values))    
     
         sK = K ^ (1 << (max_log_K - i - 1))
-        print("sK value:", sK)
 
         if should_mov:
             K = sK
@@ -118,8 +114,6 @@ def knapsack(weights, values, C, recursive=True):
         if increased:
             ret = dp[i % 2][C]
             
-        print(dp, "\n")
-
     return ret
 
 

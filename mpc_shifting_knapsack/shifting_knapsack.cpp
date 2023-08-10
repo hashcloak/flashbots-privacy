@@ -147,10 +147,10 @@ uint64_t knapsack_val(
 
 int main(int argc, char const *argv[])
 {
-    std::vector<uint64_t> weights {5, 4, 3, 2, 1};
-    std::vector<uint64_t> values {1, 2, 3, 4, 5};
+    std::vector<uint64_t> weights {2415, 2829, 2633, 2982, 2351};
+    std::vector<uint64_t> values {2470, 2895, 1718, 321, 2595};
     uint64_t W = 10;
-    uint64_t C = 10;
+    uint64_t C = 3000;
 
     auto result = knapsack_val<true>(weights, values, C, W);
 
