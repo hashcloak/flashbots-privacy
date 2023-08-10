@@ -1,6 +1,15 @@
 import math
 
 
+program.use_edabit(True)
+
+
+def show_matrix(m):
+    for i in range(len(m)):
+        print_ln("%s ", m[i].reveal())
+    print_ln("")
+
+
 def knapsack(weights, values, C):
     '''
     The recursive param is to choose if solving the problem using the iterative
@@ -32,8 +41,10 @@ def knapsack(weights, values, C):
         increased = dp[i % 2][C] > ret[0]
 
         ret[0] = increased.if_else(dp[i % 2][C], ret[0])
+        
+        show_matrix(dp)
 
-    return ret
+    return ret[0]
 
 
 def cyclic_shift(values, K, max_log_K):
@@ -41,11 +52,18 @@ def cyclic_shift(values, K, max_log_K):
 
     @for_range(max_log_K)
     def _(i):
-        should_mov = (K.bit_and(cint(1 << max_log_K))) != 0
-        maybe_shift_by_k(should_mov, values, 1 << max_log_K, 0,
+        should_mov = (K.bit_and(cint(1 << (max_log_K - i - 1)))) != 0
+
+        maybe_shift_by_k(should_mov, values, 1 << (max_log_K - i - 1), 0,
                          len(values))
 
-        sK = K.bit_xor(1 << max_log_K)
+        print_ln("Power: %s", 1 << (max_log_K - i - 1))
+
+        print_ln("%s XOR %s = %s", 
+                 K.reveal(), 
+                 1 << (max_log_K - i - 1), 
+                 K.bit_xor(1 << (max_log_K - i - 1)).reveal())
+        sK = K.bit_xor(1 << (max_log_K - i - 1))
 
         K.update(should_mov.if_else(sK, K))
 
@@ -59,20 +77,20 @@ def is_base_case(K, start, end, n_values):
 
 
 def maybe_shift_by_k(enabled, values, K, i, j):
-    start = Array(1, regint)
-    end = Array(1, regint) 
-    start[0] = regint(i)
-    end[0] = regint(j)
+    start = Array(1, cint)
+    end = Array(1, cint) 
+
+    start[0] = cint(i)
+    end[0] = cint(j)
 
     K_temp = K
-    K = Array(1, regint)
-    K[0] = regint(K_temp)
+    K = Array(1, cint)
+    K[0] = cint(K_temp)
 
-    K2 = Array(1, regint)
-    K2[0] = regint(1)
+    K2 = Array(1, cint)
+    K2[0] = cint(1)
 
-    condition = regint(is_base_case(K[0], start[0], end[0], 
-                       len(values)) * (K2[0] != 0))
+    condition = (1 - is_base_case(K[0], start[0], end[0], len(values))) * (K2[0] != 0)
 
     @while_do(lambda: condition)
     def _():
@@ -87,16 +105,16 @@ def maybe_shift_by_k(enabled, values, K, i, j):
                 values[start[0] + ((l + K[0]) % N)]
             )
 
-            values[start[0] + l] = enabled.if_else(aux, values[start + l]) 
+            values[start[0] + l] = enabled.if_else(aux, values[start[0] + l]) 
 
         # Condition for next iteration
         K2[0] = (K[0] - (N % K[0])) % K[0]
 
         # Definition of subproblem
-        K[0] = K2[0]
         start[0] = end[0] - K[0]
+        K[0] = K2[0]
 
-        condition.update(is_base_case(K[0], start[0], end[0], len(values)) * (K2[0] != 0))
+        condition.update((1 - is_base_case(K[0], start[0], end[0], len(values))) * (K2[0] != 0))
 
 
 W = 10
@@ -108,6 +126,9 @@ weights = Array(n, sint)
 for i in range(n):
     values[i] = sint.get_input_from(i)
     weights[i] = sint.get_input_from(i)
+
+print_ln("Values: %s", values.reveal())
+print_ln("Weights: %s", weights.reveal())
 
 knapsack_value = knapsack(weights, values, W)
 

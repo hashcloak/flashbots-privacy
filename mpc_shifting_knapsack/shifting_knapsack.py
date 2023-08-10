@@ -32,7 +32,6 @@ def is_base_case(K, start, end, n_values):
     assert start <= end
     assert end <= n_values
     assert start < n_values
-
     N = end - start
 
     K = K % N
@@ -63,23 +62,28 @@ def maybe_shift_by_k_iter(enabled, values, K, i, j):
         K2 = (K - (N % K)) % K
 
         # Definition of subproblem
-        K = K2
         start = end - K
+        K = K2
+        
 
 
 def cyclic_shift(values, K, max_log_K, recursive=True):
+    
+    print("K starting:", K)
 
     # Applies obivious ciclic shift on an array of vals by an ammount of
     # max_log_K
     for i in range(max_log_K):
-        should_mov = (K & (1 << max_log_K)) != 0
+        should_mov = (K & (1 << (max_log_K - i - 1))) != 0
         if recursive:
-            maybe_shift_by_k(should_mov, values, 1 << max_log_K, 0,
+            maybe_shift_by_k(should_mov, values, 1 << (max_log_K - i - 1), 0,
                              len(values))
         else:
-            maybe_shift_by_k_iter(should_mov, values, 1 << max_log_K,
-                                  0, len(values))
-        sK = K ^ (1 << max_log_K)
+            maybe_shift_by_k_iter(should_mov, values, 1 << (max_log_K - i - 1),
+                                  0, len(values))    
+    
+        sK = K ^ (1 << (max_log_K - i - 1))
+        print("sK value:", sK)
 
         if should_mov:
             K = sK
@@ -113,19 +117,20 @@ def knapsack(weights, values, C, recursive=True):
 
         if increased:
             ret = dp[i % 2][C]
+            
+        print(dp, "\n")
 
     return ret
 
 
 if __name__ == "__main__":
-    n = int(input("Enter n, number of distinct items: "))
-    W = int(input("Enter W, knapsack capacity: "))
-    values = list(map(int, input("Knapsack values: ").strip().split()))
-    weights = list(map(int, input("Knapsack weights: ").strip().split()))
-
+    n = 5
+    W = 10
+    weights = [1, 2, 3, 4, 5]
+    values = [5, 4, 3, 2, 1]
+    
     max_val = knapsack(weights, values, W)
+    print("Max value: ", max_val)
 
     max_val_iter = knapsack(weights, values, W, recursive=False)
-
-    print("Max value: ", max_val)
     print("Max value iterative", max_val_iter)
