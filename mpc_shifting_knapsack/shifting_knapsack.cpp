@@ -1,3 +1,6 @@
+// This implementation was done by Afonso Tinoco from Carnegie Mellon University
+
+
 #include <cmath>
 #include <cstdint>
 #include <vector>

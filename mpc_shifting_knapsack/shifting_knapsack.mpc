@@ -11,10 +11,6 @@ def show_matrix(m):
 
 
 def knapsack(weights, values, C):
-    '''
-    The recursive param is to choose if solving the problem using the iterative
-    version or the recursive one.
-    '''
     N = len(weights)
     lwC = math.ceil(math.log2(C + 1)) + 1
     ret = Array(1, sint)
@@ -72,12 +68,12 @@ def cyclic_shift(values, K, max_log_K):
 
     @for_range(max_log_K)
     def _(i):
-        should_mov = bitwise_and(K, (cint(1 << (max_log_K - i - 1)))) != 0
+        shift = cint(1 << (max_log_K - i - 1))
+        should_mov = bitwise_and(K, shift) != 0
 
-        maybe_shift_by_k(should_mov, values, 1 << (max_log_K - i - 1), 0,
-                         len(values))
+        maybe_shift_by_k(should_mov, values, shift, 0, len(values))
 
-        sK = bitwise_xor(K, cint(1 << (max_log_K - i - 1)))
+        sK = bitwise_xor(K, shift)
 
         K.update(should_mov.if_else(sK, K))
 
@@ -104,9 +100,7 @@ def maybe_shift_by_k(enabled, values, K, i, j):
     K2 = Array(1, regint)
     K2[0] = regint(1)
 
-    condition = (1 - is_base_case(K[0], start[0], end[0], len(values))) * (K2[0] != 0)
-
-    @while_do(lambda: condition)
+    @while_do(lambda: (1 - is_base_case(K[0], start[0], end[0], len(values))) * (K2[0] != 0))
     def _():
         N = end[0] - start[0]
         K[0] = K[0] % N
@@ -127,11 +121,6 @@ def maybe_shift_by_k(enabled, values, K, i, j):
         # Definition of subproblem
         start[0] = end[0] - K[0]
         K[0] = K2[0]
-
-        condition.update(
-            (1 - is_base_case(K[0], start[0], end[0], len(values))) * \
-            (K2[0] != 0)
-        )
 
 
 W = 10
