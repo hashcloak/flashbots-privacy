@@ -1,0 +1,139 @@
+import math
+
+
+program.use_edabit(True)
+
+
+def show_matrix(m):
+    for i in range(len(m)):
+        print_ln("%s ", m[i].reveal())
+    print_ln("")
+
+
+def knapsack(weights, values, C):
+    N = len(weights)
+    lwC = math.ceil(math.log2(C + 1)) + 1
+    ret = Array(1, sint)
+    ret[0] = 0
+
+    dp = Matrix(2, C + 1, sint)
+    dp.assign_all(0)
+
+    @for_range(N)
+    def _(i):
+        @for_range(C + 1)
+        def _(j):
+            dp[i % 2][j] = dp[(i + 1) % 2][j]
+
+        cyclic_shift(dp[(i + 1) % 2], C + 1 - weights[i], lwC)
+
+        @for_range(C + 1)
+        def _(j):
+            opt2 = dp[(i + 1) % 2][j] + values[i]
+            should_mov = (j >= weights[i]) * (opt2 > dp[i % 2][j])
+
+            dp[i % 2][j] = should_mov.if_else(opt2, dp[i % 2][j])
+
+        increased = dp[i % 2][C] > ret[0]
+
+        ret[0] = increased.if_else(dp[i % 2][C], ret[0])
+
+    return ret[0]
+
+
+def bitwise_xor(a, b):
+    bits_a = a.bit_decompose()
+    bits_b = b.bit_decompose()
+    bits_xor = Array(len(bits_a), sint)
+
+    for i in range(len(bits_a)):
+        bits_xor[i] = bits_a[i].bit_xor(bits_b[i])
+
+    return sint.bit_compose(bits_xor)
+
+
+def bitwise_and(a, b):
+    bits_a = a.bit_decompose()
+    bits_b = b.bit_decompose()
+    bits_and = Array(len(bits_a), sint)
+
+    for i in range(len(bits_a)):
+        bits_and[i] = bits_a[i].bit_and(bits_b[i])
+
+    return sint.bit_compose(bits_and)
+
+
+def cyclic_shift(values, K, max_log_K):
+    K = sint(K) 
+
+    @for_range(max_log_K)
+    def _(i):
+        shift = cint(1 << (max_log_K - i - 1))
+        should_mov = bitwise_and(K, shift) != 0
+
+        maybe_shift_by_k(should_mov, values, shift, 0, len(values))
+
+        sK = bitwise_xor(K, shift)
+
+        K.update(should_mov.if_else(sK, K))
+
+
+def is_base_case(K, start, end, n_values):
+    # Computations for the base case
+    N = end - start
+    K = K % N
+
+    return K == 0
+
+
+def maybe_shift_by_k(enabled, values, K, i, j):
+    start = Array(1, regint)
+    end = Array(1, regint) 
+
+    start[0] = regint(i)
+    end[0] = regint(j)
+
+    K_temp = K
+    K = Array(1, regint)
+    K[0] = regint(K_temp)
+
+    K2 = Array(1, regint)
+    K2[0] = regint(1)
+
+    @while_do(lambda: (1 - is_base_case(K[0], start[0], end[0], len(values))) * (K2[0] != 0))
+    def _():
+        N = end[0] - start[0]
+        K[0] = K[0] % N
+        
+        @for_range(N - K[0])
+        def _(l):
+            aux = values[start[0] + ((l + K[0]) % N)]
+            values[start[0] + ((l + K[0]) % N)] = enabled.if_else(
+                values[start[0] + l],
+                values[start[0] + ((l + K[0]) % N)]
+            )
+
+            values[start[0] + l] = enabled.if_else(aux, values[start[0] + l]) 
+
+        # Condition for next iteration
+        K2[0] = (K[0] - (N % K[0])) % K[0]
+
+        # Definition of subproblem
+        start[0] = end[0] - K[0]
+        K[0] = K2[0]
+
+
+W = 10
+n = 5
+
+values = Array(n, sint)
+weights = Array(n, sint)
+
+for i in range(n):
+    values[i] = sint.get_input_from(i)
+    weights[i] = sint.get_input_from(i)
+
+knapsack_value = knapsack(weights, values, W)
+
+print_ln("Knapsack value: %s", knapsack_value.reveal())
+

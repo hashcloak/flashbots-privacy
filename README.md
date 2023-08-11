@@ -7,6 +7,7 @@ So far, we have the following experiments:
 - `mpc_bundle_scoring`: Computing Flashbots' bundle scoring algorithm using multiparty computation (MPC)
 - `mpc_block_knapsack`: Dynamic Programming solver for block building implemented in MPC
 - `mpc_knapsack_auction`: Greedy-based knapsack auction for block building implemented in MPC
+- `mpc_shifting_knapsack`: An alternative to the dynamic programing solver without using ORAM.
 
 ## How to run
 

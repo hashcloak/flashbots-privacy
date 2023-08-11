@@ -3,3 +3,6 @@
 /flashbots_mpc/Player-Data/*.0
 
 __pycache__
+
+*.o
+.vscode/
