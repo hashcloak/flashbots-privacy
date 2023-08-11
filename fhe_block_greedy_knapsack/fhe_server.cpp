@@ -3,6 +3,8 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <string.h>
+#include <fstream>
+
 
 using namespace std;
 using namespace seal;
@@ -10,11 +12,10 @@ using namespace seal;
 int main() {
     // Set up encryption parameters
     // This should be identical to the client side
-    EncryptionParameters parms(scheme_type::bfv);
+    EncryptionParameters parms(scheme_type::ckks);
     size_t poly_modulus_degree = 8192;
     parms.set_poly_modulus_degree(poly_modulus_degree);
     parms.set_coeff_modulus(CoeffModulus::BFVDefault(poly_modulus_degree));
-    parms.set_plain_modulus(256);
 
     SEALContext context(parms);
 
@@ -28,6 +29,8 @@ int main() {
     Encryptor encryptor(context, public_key);
     Decryptor decryptor(context, secret_key);
     Evaluator evaluator(context);
+    CKKSEncoder encoder(context);
+    double scale = pow(2.0, 40);
 
     // Receive encrypted message from client...
     // Assume 'sock' is the socket descriptor, and 'client' is a sockaddr_in struct
@@ -56,25 +59,46 @@ int main() {
         return 1;
     }
 
-    Ciphertext encrypted;
-    std::stringstream ss;
-    //char buffer[4096];
-    //memset(buffer, 0, sizeof(buffer));
+    //Ciphertext encrypted;
 
-
-    if(recv(new_sock, &ss, sizeof(ss), 0) < 0) {
-        perror("Receive failed");
+    uint32_t matrix_size;
+    if(recv(new_sock, &matrix_size, sizeof(matrix_size), 0) < 0) {
+        perror("Receiving matrix size failed");
         return 1;
     }
 
-    // ss.str(buffer);
+    std::stringstream ss;
+
+    if(recv(new_sock, &ss, matrix_size, 0) < 0) {
+        perror("Receiving matrix content failed");
+        return 1;
+    }
+
+    istringstream serialized_matrix(ss.str());
+    vector<vector<Ciphertext>> bids_matrix(2, vector<Ciphertext>(3));
+    for (auto& row: bids_matrix) {
+        for (Ciphertext ciphertext: row) {
+            //string ser_pt;
+            //getline(serialized_matrix, ser_pt);
+            ciphertext.load(context, serialized_matrix);
+        }
+    }
+
+    for (const auto& row: bids_matrix) {
+        for (const auto&ct : row) {
+            cout << ct.data() << "\n";
+        }
+    }
+
+/*     // ss.str(buffer);
     encrypted.load(context, ss);
 
     // Perform operation on the encrypted data
     // For instance, we'll square the input
+    */
     Ciphertext result;
-    evaluator.square(encrypted, result);
-
+    //evaluator.square(encrypted, result);
+ 
     // Send the result back to the client
     result.save(ss);
     std::string result_str = ss.str();
