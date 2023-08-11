@@ -41,10 +41,30 @@ def knapsack(weights, values, C):
         increased = dp[i % 2][C] > ret[0]
 
         ret[0] = increased.if_else(dp[i % 2][C], ret[0])
-        
-        show_matrix(dp)
 
     return ret[0]
+
+
+def bitwise_xor(a, b):
+    bits_a = a.bit_decompose()
+    bits_b = b.bit_decompose()
+    bits_xor = Array(len(bits_a), sint)
+
+    for i in range(len(bits_a)):
+        bits_xor[i] = bits_a[i].bit_xor(bits_b[i])
+
+    return sint.bit_compose(bits_xor)
+
+
+def bitwise_and(a, b):
+    bits_a = a.bit_decompose()
+    bits_b = b.bit_decompose()
+    bits_and = Array(len(bits_a), sint)
+
+    for i in range(len(bits_a)):
+        bits_and[i] = bits_a[i].bit_and(bits_b[i])
+
+    return sint.bit_compose(bits_and)
 
 
 def cyclic_shift(values, K, max_log_K):
@@ -52,18 +72,12 @@ def cyclic_shift(values, K, max_log_K):
 
     @for_range(max_log_K)
     def _(i):
-        should_mov = (K.bit_and(cint(1 << (max_log_K - i - 1)))) != 0
+        should_mov = bitwise_and(K, (cint(1 << (max_log_K - i - 1)))) != 0
 
         maybe_shift_by_k(should_mov, values, 1 << (max_log_K - i - 1), 0,
                          len(values))
 
-        print_ln("Power: %s", 1 << (max_log_K - i - 1))
-
-        print_ln("%s XOR %s = %s", 
-                 K.reveal(), 
-                 1 << (max_log_K - i - 1), 
-                 K.bit_xor(1 << (max_log_K - i - 1)).reveal())
-        sK = K.bit_xor(1 << (max_log_K - i - 1))
+        sK = bitwise_xor(K, cint(1 << (max_log_K - i - 1)))
 
         K.update(should_mov.if_else(sK, K))
 
@@ -77,18 +91,18 @@ def is_base_case(K, start, end, n_values):
 
 
 def maybe_shift_by_k(enabled, values, K, i, j):
-    start = Array(1, cint)
-    end = Array(1, cint) 
+    start = Array(1, regint)
+    end = Array(1, regint) 
 
-    start[0] = cint(i)
-    end[0] = cint(j)
+    start[0] = regint(i)
+    end[0] = regint(j)
 
     K_temp = K
-    K = Array(1, cint)
-    K[0] = cint(K_temp)
+    K = Array(1, regint)
+    K[0] = regint(K_temp)
 
-    K2 = Array(1, cint)
-    K2[0] = cint(1)
+    K2 = Array(1, regint)
+    K2[0] = regint(1)
 
     condition = (1 - is_base_case(K[0], start[0], end[0], len(values))) * (K2[0] != 0)
 
@@ -114,7 +128,10 @@ def maybe_shift_by_k(enabled, values, K, i, j):
         start[0] = end[0] - K[0]
         K[0] = K2[0]
 
-        condition.update((1 - is_base_case(K[0], start[0], end[0], len(values))) * (K2[0] != 0))
+        condition.update(
+            (1 - is_base_case(K[0], start[0], end[0], len(values))) * \
+            (K2[0] != 0)
+        )
 
 
 W = 10
@@ -126,9 +143,6 @@ weights = Array(n, sint)
 for i in range(n):
     values[i] = sint.get_input_from(i)
     weights[i] = sint.get_input_from(i)
-
-print_ln("Values: %s", values.reveal())
-print_ln("Weights: %s", weights.reveal())
 
 knapsack_value = knapsack(weights, values, W)
 
