@@ -1,4 +1,5 @@
 {
-    "mp_spdz_input_path": "MP-SDPZ/Player-Data/",
-    "shaper_path": "experiment/shaper.sh"
+    "mp_spdz_input_path": "MP-SPDZ/Player-Data/",
+    "shaper_path": "experiment/shaper.sh",
+    "mp_spdz_root": "MP-SPDZ"
 }
