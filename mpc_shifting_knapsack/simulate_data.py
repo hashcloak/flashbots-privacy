@@ -2,8 +2,8 @@ import random
 import os
 import shifting_knapsack
 
-MAX_WEIGHT = 3000
-MIN_WEIGHT = 2100
+MAX_WEIGHT = 300000
+MIN_WEIGHT = 210
 
 
 class Object:
@@ -50,7 +50,7 @@ if __name__ == "__main__":
     # Execute knapsack for this problem
     values, weights = extract_knapsack_info(objects)
     result = shifting_knapsack.knapsack(weights, values, MAX_WEIGHT,
-                                        recursive=False)
+                                        recursive=True)
     
     print("Result: ", result)
     

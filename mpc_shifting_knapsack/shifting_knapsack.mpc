@@ -123,8 +123,8 @@ def maybe_shift_by_k(enabled, values, K, i, j):
         K[0] = K2[0]
 
 
-W = 10
-n = 5
+W = 300000
+n = 3 
 
 values = Array(n, sint)
 weights = Array(n, sint)
