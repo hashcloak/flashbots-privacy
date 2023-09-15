@@ -167,7 +167,7 @@ if __name__ == "__main__":
 
         has_net_limit_response = exp["has_net_limit"]
 
-        if has_net_limit_response == "y":
+        if has_net_limit_response == True:
             bandwidth = exp["net_limits"]["bandwidth"]
             latency = exp["net_limits"]["latency"]
             net_controller = NetworkController(bandwidth, latency)

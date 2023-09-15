@@ -11,7 +11,7 @@
             "max_value": 10,
             "n_parties": 4,
             "tx_per_party": 5,
-            "has_net_limit": false,
+            "has_net_limit": true,
             "net_limits": {
                 "bandwidth": "10gbps",
                 "latency": "0.3ms"
