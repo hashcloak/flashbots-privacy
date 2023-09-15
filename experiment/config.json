@@ -1,5 +1,29 @@
 {
     "mp_spdz_input_path": "MP-SPDZ/Player-Data/",
     "shaper_path": "experiment/shaper.sh",
-    "mp_spdz_root": "MP-SPDZ"
+    "mp_spdz_root": "MP-SPDZ",
+
+    "experiments": [
+        {
+            "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
+            "protocol": "mal-shamir.sh",
+            "max_weight": 20,
+            "max_value": 10,
+            "n_parties": 4,
+            "has_net_limit": false,
+            "net_limits": {
+                "bandwidth": "10gbps",
+                "latency": "0.3ms"
+            }
+        },
+        {
+            "algorithm": "mpc_block_knapsack/knapsack.mpc",
+            "protocol": "mal-shamir.sh",
+            "max_weight": 20,
+            "max_value": 10,
+            "n_parties": 5,
+            "has_net_limit": false,
+            "net_limits": null
+        }
+    ]
 }

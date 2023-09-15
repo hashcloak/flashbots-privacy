@@ -42,14 +42,17 @@ def knapsack_auction(bidders, max_block_space, highest_bidder):
             if bidder is not False:
                 print_ln("%s %s %s", bidder[0].reveal(), bidder[1].reveal(), bidder[2].reveal())
 
+n = int(program.args[1])
+W = int(program.args[2])
+
 bidders = []
-for i in range(10):
+for i in range(n):
     bid = sfix.get_input_from(i)
     block_space = sfix.get_input_from(i)
     bidder = Bidder(i, bid, block_space)
     bidders.append(bidder)
 
-bidder_matrix = sfix.Matrix(10, 4)
+bidder_matrix = sfix.Matrix(n, 4)
 counter = 0
 for bidder in bidders:
     vec = sfix.Array(4)
@@ -60,4 +63,4 @@ for bidder in bidders:
 bidder_matrix.sort()
 highest_bidder = bidder_matrix[0]
 
-knapsack_auction(bidder_matrix, 30000000,highest_bidder)
+knapsack_auction(bidder_matrix, W, highest_bidder)

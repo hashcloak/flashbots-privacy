@@ -37,6 +37,7 @@ class Experiment:
         if self.net_controller is not None:
             self.net_controller.start()
 
+        self.setup_ssl()
         self.create_mpc_input_files()
         self.compile_mpc_file()
         self.result = self.run_mpc_protocol()
@@ -51,14 +52,19 @@ class Experiment:
         logging.info(
             "Running protocol {} for algorithm {}".format(self.protocol, self.algorithm)
         )
-        path_protocol = os.path.join("Scripts", self.protocol)
+        path_protocol = os.path.join("./Scripts", self.protocol)
 
-        mpc_file_name = self.algorithm.split("/")[-1].rstrip(".mpc")
+        mpc_file_name = self.algorithm.split("/")[-1].rstrip(".mpc") + "-{}-{}".format(
+            self.n_parties, self.max_weight
+        )
         run_mpc_result = subprocess.run(
-            [path_protocol, mpc_file_name], cwd=config["mp_spdz_root"]
+            ["env", "PLAYERS={}".format(self.n_parties), path_protocol, mpc_file_name],
+            cwd=config["mp_spdz_root"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
         )
         run_mpc_result.check_returncode()
-        return run_mpc_result.stdout
+        return run_mpc_result.stdout.decode("utf-8")
 
     def create_mpc_input_files(self) -> None:
         for i in range(self.n_parties):
@@ -75,9 +81,29 @@ class Experiment:
         logging.info("Compiling MPC file {}".format(self.algorithm))
         path_mpc_file = os.path.join("..", self.algorithm)
         compile_result = subprocess.run(
-            ["./compile.py", "-F", "64", path_mpc_file], cwd=config["mp_spdz_root"]
+            [
+                "./compile.py",
+                "-F",
+                "64",
+                path_mpc_file,
+                str(self.n_parties),
+                str(self.max_weight),
+            ],
+            cwd=config["mp_spdz_root"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.STDOUT,
         )
         compile_result.check_returncode()
+
+    def setup_ssl(self) -> None:
+        logging.info("Setting up SSL for {} parties".format(self.n_parties))
+        setup_result = subprocess.run(
+            ["Scripts/setup-ssl.sh", str(self.n_parties)],
+            cwd=config["mp_spdz_root"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.STDOUT,
+        )
+        setup_result.check_returncode()
 
 
 class NetworkController:
@@ -88,36 +114,45 @@ class NetworkController:
     def start(self) -> None:
         logging.info("Starting shaper.")
         start_shaper_result = subprocess.run(
-            ["sh", config["shaper_path"], "start", self.bandwidth, self.latency]
+            ["sh", config["shaper_path"], "start", self.bandwidth, self.latency],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.STDOUT,
         )
         start_shaper_result.check_returncode()
         logging.info("Shaper successfully started.")
 
     def stop(self) -> None:
         logging.info("Stopping shaper.")
-        stop_shaper_result = subprocess.run(["sh", config["shaper_path"], "stop"])
+        stop_shaper_result = subprocess.run(
+            ["sh", config["shaper_path"], "stop"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.STDOUT,
+        )
         stop_shaper_result.check_returncode()
         logging.info("Shapper successfully stopped.")
 
 
 if __name__ == "__main__":
-    algorithm = input("What algorithm do you want to test? ")
-    protocol = input("With which protocol do you want to run the experiment? ")
-    max_weight = int(input("How much is the max. weight? "))
-    max_value = int(input("How much is the max. value? "))
-    n_parties = int(input("How many parties do you want? "))
+    for exp in config["experiments"]:
+        algorithm = exp["algorithm"]
+        protocol = exp["protocol"]
+        max_weight = exp["max_weight"]
+        max_value = exp["max_value"]
+        n_parties = exp["n_parties"]
 
-    has_net_limit_response = input("Do you want to limit the network? [y/n]: ")
+        has_net_limit_response = exp["has_net_limit"]
 
-    if has_net_limit_response == "y":
-        bandwidth = input("\tInput the bandwidth: ")
-        latency = input("\tInput the latency: ")
-        net_controller = NetworkController(bandwidth, latency)
-    else:
-        net_controller = None
+        if has_net_limit_response == "y":
+            bandwidth = exp["net_limits"]["bandwidth"]
+            latency = exp["net_limits"]["latency"]
+            net_controller = NetworkController(bandwidth, latency)
+        else:
+            net_controller = None
 
-    experiment = Experiment(
-        algorithm, protocol, max_weight, max_value, n_parties, net_controller
-    )
-    
-    experiment.run()
+        experiment = Experiment(
+            algorithm, protocol, max_weight, max_value, n_parties, net_controller
+        )
+        experiment.run()
+
+        print("=========== Results for Experiment ============")
+        print(experiment.result)
