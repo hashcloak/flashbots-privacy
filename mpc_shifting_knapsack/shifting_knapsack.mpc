@@ -125,13 +125,17 @@ def maybe_shift_by_k(enabled, values, K, i, j):
 
 n = int(program.args[1])
 W = int(program.args[2])
+tx_per_party = int(program.args[3])
 
-values = Array(n, sint)
-weights = Array(n, sint)
+values_tmp = []
+weights_tmp = []
 
 for i in range(n):
-    values[i] = sint.get_input_from(i)
-    weights[i] = sint.get_input_from(i)
+    values_tmp.extend(sint.get_input_from(i, size=tx_per_party))
+    weights_tmp.extend(sint.get_input_from(i, size=tx_per_party))
+
+values = Array(n, sint).create_from(values_tmp)
+weights = Array(n, sint).create_from(weights_tmp)
 
 knapsack_value = knapsack(weights, values, W)
 

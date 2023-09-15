@@ -27,12 +27,13 @@ Before executing the scripts you need to modify the contents of `experiment/conf
     "max_weight": 20,
     "max_value": 10,
     "n_parties": 4,
+    "tx_per_party": 5,
     "has_net_limit": false,
     "net_limits": {
         "bandwidth": "10gbps",
         "latency": "0.3ms"
     }
-},
+}
 ```
 
 In the `algorithm` field you need to specify the path to the `.mpc` file relative to the algorithm that you want to test. The `protocol` field should have the name of the `.sh` file consistent with the available protocols in the MP-SDPZ framework. You can find all the `.sh` files supported [here](https://github.com/data61/MP-SPDZ/tree/master/Scripts). The field `has_net_limits` is a boolean that defines if the protocol will be executed with a specified bandwidth and latency. If this flag is set to `true`, you need to specify the desired bandwidth and latency in the `net_limits` JSON object. The bandwidth and latency must be specified according to the parameters section in the [`tc` command documentation](https://man7.org/linux/man-pages/man8/tc.8.html).

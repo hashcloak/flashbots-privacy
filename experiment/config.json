@@ -6,10 +6,11 @@
     "experiments": [
         {
             "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
-            "protocol": "mal-shamir.sh",
+            "protocol": "shamir.sh",
             "max_weight": 20,
             "max_value": 10,
             "n_parties": 4,
+            "tx_per_party": 5,
             "has_net_limit": false,
             "net_limits": {
                 "bandwidth": "10gbps",
@@ -18,10 +19,21 @@
         },
         {
             "algorithm": "mpc_block_knapsack/knapsack.mpc",
-            "protocol": "mal-shamir.sh",
+            "protocol": "shamir.sh",
             "max_weight": 20,
             "max_value": 10,
             "n_parties": 5,
+            "tx_per_party": 2,
+            "has_net_limit": false,
+            "net_limits": null
+        },
+        {
+            "algorithm": "mpc_knapsack_auction/knapsack_auction.mpc",
+            "protocol": "shamir.sh",
+            "max_weight": 20,
+            "max_value": 10,
+            "n_parties": 5,
+            "tx_per_party": 2,
             "has_net_limit": false,
             "net_limits": null
         }
