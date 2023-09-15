@@ -42,3 +42,8 @@ Once the JSON config file has all the desired experiments to be executed, you ca
 ```bash
 sudo python3 experiment/run_experiment.py
 ```
+
+This testing tool works for the following algorithms:
+- `mpc_block_knapsack/knapsack.mpc`
+- `mpc_knapsack_auction/knapsack_auction.mpc`
+- `mpc_shifting_knapsack/shifting_knapsack.mpc`
