@@ -5,11 +5,15 @@ cfix.set_precision(f=16, k=80)
 sfix.set_precision(f=16, k=80)
 
 class Bidder:
-    def __init__(self, id, bid, block_space):
+    def __init__(self, id, bids, block_spaces):
         self.bidder_id = id
-        self.bid = sfix(bid)
-        self.wanted_block_space = sfix(block_space)
-        self.factor = sfix(self.bid/self.wanted_block_space)
+        self.bids = bids
+        self.wanted_block_spaces = block_spaces
+        self.factors = []
+
+        # The list of bids and block space have the same lenght
+        for i in range(len(bids)):
+            self.factors.append(sfix(bids[i] / block_spaces[i]))
 
 def knapsack_auction(bidders, max_block_space, highest_bidder): 
     actual_capacity_of_solution = MemValue(sfix(0))
@@ -34,7 +38,7 @@ def knapsack_auction(bidders, max_block_space, highest_bidder):
 
     @if_e(highest_bidder[1].reveal() > surplus.reveal())
     def _():
-        print_ln("Winner is bidder %s with bid %s and wanted block space %s", highest_bidder[0].reveal(), highest_bidder[1].reveal(), highest_bidder[2].reveal())
+        print_ln("Winner is bidder %s with bid %s and wanted block space %s", highest_bidder[3].reveal(), highest_bidder[2].reveal(), highest_bidder[1].reveal())
     @else_
     def _():
         print_ln("Knapsack Auction Winners:")
@@ -42,22 +46,26 @@ def knapsack_auction(bidders, max_block_space, highest_bidder):
             if bidder is not False:
                 print_ln("%s %s %s", bidder[0].reveal(), bidder[1].reveal(), bidder[2].reveal())
 
-bidders = []
-for i in range(10):
-    bid = sfix.get_input_from(i)
-    block_space = sfix.get_input_from(i)
-    bidder = Bidder(i, bid, block_space)
-    bidders.append(bidder)
+n = int(program.args[1])
+W = int(program.args[2])
+tx_per_party = int(program.args[3])
 
-bidder_matrix = sfix.Matrix(10, 4)
+bidders = []
+for i in range(n):
+    bids = sfix.get_input_from(i, size=tx_per_party)
+    block_spaces = sfix.get_input_from(i, size=tx_per_party)
+    bidders.append(Bidder(i, bids, block_spaces))
+
+bidder_matrix = sfix.Matrix(n * tx_per_party, 4)
 counter = 0
 for bidder in bidders:
-    vec = sfix.Array(4)
-    vec.assign([bidder.bidder_id, bidder.bid, bidder.wanted_block_space, bidder.factor])
-    bidder_matrix[counter] = vec.get_reverse_vector()
-    counter += 1
+    for i in range(tx_per_party):
+        vec = sfix.Array(4)
+        vec.assign([bidder.bidder_id, bidder.bids[i], bidder.wanted_block_spaces[i], bidder.factors[i]])
+        bidder_matrix[counter] = vec.get_reverse_vector()
+        counter += 1
 
 bidder_matrix.sort()
 highest_bidder = bidder_matrix[0]
 
-knapsack_auction(bidder_matrix, 30000000,highest_bidder)
+knapsack_auction(bidder_matrix, W, highest_bidder)
