@@ -7,35 +7,28 @@
         {
             "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
             "protocol": "shamir.sh",
-            "max_weight": 20,
-            "max_value": 10,
+            "max_weight": 30,
+            "max_value": 20,
             "n_parties": 4,
-            "tx_per_party": 5,
-            "has_net_limit": true,
+            "tx_per_party": 2,
+            "has_net_limit": false,
             "net_limits": {
                 "bandwidth": "10gbps",
                 "latency": "0.3ms"
             }
-        },
+        }, 
         {
             "algorithm": "mpc_block_knapsack/knapsack.mpc",
             "protocol": "shamir.sh",
-            "max_weight": 20,
-            "max_value": 10,
+            "max_weight": 30,
+            "max_value": 20,
             "n_parties": 5,
             "tx_per_party": 2,
             "has_net_limit": false,
-            "net_limits": null
-        },
-        {
-            "algorithm": "mpc_knapsack_auction/knapsack_auction.mpc",
-            "protocol": "shamir.sh",
-            "max_weight": 20,
-            "max_value": 10,
-            "n_parties": 5,
-            "tx_per_party": 2,
-            "has_net_limit": false,
-            "net_limits": null
-        }
+            "net_limits": {
+                "bandwidth": "10gbps",
+                "latency": "0.3ms"
+            }
+        } 
     ]
 }

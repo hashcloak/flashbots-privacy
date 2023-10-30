@@ -1,8 +1,9 @@
-import os.path
 import json
-import random
-import subprocess
 import logging
+from datetime import datetime
+import subprocess
+import random
+import os.path
 
 # Setup logging
 logging.basicConfig(
@@ -52,7 +53,26 @@ class Experiment:
             self.net_controller.stop()
 
         self.has_finished = True
-
+        self.save_result_file()
+        
+    def save_result_file(self) -> None:
+        """Saves the result of the experiment in a file."""
+        
+        # Set the filename
+        date = datetime.now()
+        name = "result--{}--{}--{}--{}--{}".format(
+            self.algorithm,
+            self.protocol,
+            self.max_weight,
+            self.n_parties,
+            str(date)
+        ).split("/")[1]
+        
+        with open("experiment/" + name + ".txt", "w") as file_output:
+            file_output.write(self.result)
+        
+        logging.info("Results saved in file {}".format(name))
+        
     def run_mpc_protocol(self) -> str:
         """Runs the MPC protocol of the compiled algorithm using MP-SDPZ."""
 
