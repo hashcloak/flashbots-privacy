@@ -109,7 +109,7 @@ class Experiment:
         repetition_results = []
         for i in range(self.repetitions):
             repetition_results.append(
-                "Time execution {}: {}".format(str(i), self.times[i])
+                "Time repetition {}: {}".format(str(i), self.times[i])
             )
             
         statistics = [
