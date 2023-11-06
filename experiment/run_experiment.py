@@ -217,8 +217,6 @@ class Experiment:
         # Set the ring size for the greedy aproach in a different way given the
         # use of fixed-point arithmetic.    
         ring_size = "64"
-        if self.algorithm == "mpc_knapsack_auction/knapsack_auction.mpc":
-            ring_size = "89" 
         
         compile_result = subprocess.run(
             [
