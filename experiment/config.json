@@ -5,9 +5,9 @@
 
     "experiments": [
         {
-            "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
-            "protocol": "shamir.sh",
-            "max_weight": 200,
+            "algorithm": "mpc_block_knapsack/knapsack.mpc",
+            "protocol": "rep4-ring.sh",
+            "max_weight": 100,
             "max_value": 20,
             "n_parties": 4,
             "repetitions": 4,
@@ -18,21 +18,126 @@
                 "bandwidth": "10gbps",
                 "latency": "0.3ms"
             }
-        }, 
+        },
         {
-            "algorithm": "mpc_block_knapsack/knapsack.mpc",
-            "protocol": "shamir.sh",
-            "max_weight": 200,
+            "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
+            "protocol": "rep4-ring.sh",
+            "max_weight": 100,
             "max_value": 20,
-            "n_parties": 5,
+            "n_parties": 4,
+            "repetitions": 4, 
             "tx_per_party": 2,
-            "repetitions": 4,
             "has_net_limit": false,
             "in_parallel": false,
             "net_limits": {
                 "bandwidth": "10gbps",
                 "latency": "0.3ms"
             }
-        } 
+        }, 
+        {
+            "algorithm": "mpc_knapsack_auction/knapsack_auction.mpc",
+            "protocol": "rep4-ring.sh",
+            "max_weight": 100,
+            "max_value": 20,
+            "n_parties": 4,
+            "repetitions": 4,
+            "tx_per_party": 2,
+            "has_net_limit": false,
+            "in_parallel": false,
+            "net_limits": {
+                "bandwidth": "10gbps",
+                "latency": "0.3ms"
+            }
+        },
+        {
+            "algorithm": "mpc_block_knapsack/knapsack.mpc",
+            "protocol": "sy-rep-ring.sh",
+            "max_weight": 100,
+            "max_value": 20,
+            "n_parties": 3,
+            "repetitions": 4,
+            "tx_per_party": 2,
+            "has_net_limit": false,
+            "in_parallel": false,
+            "net_limits": {
+                "bandwidth": "10gbps",
+                "latency": "0.3ms"
+            }
+        },
+        {
+            "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
+            "protocol": "sy-rep-ring.sh",
+            "max_weight": 100,
+            "max_value": 20,
+            "n_parties": 3,
+            "repetitions": 4, 
+            "tx_per_party": 2,
+            "has_net_limit": false,
+            "in_parallel": false,
+            "net_limits": {
+                "bandwidth": "10gbps",
+                "latency": "0.3ms"
+            }
+        }, 
+        {
+            "algorithm": "mpc_knapsack_auction/knapsack_auction.mpc",
+            "protocol": "sy-rep-ring.sh",
+            "max_weight": 100,
+            "max_value": 20,
+            "n_parties": 3,
+            "repetitions": 4,
+            "tx_per_party": 2,
+            "has_net_limit": false,
+            "in_parallel": false,
+            "net_limits": {
+                "bandwidth": "10gbps",
+                "latency": "0.3ms"
+            }
+        },
+        {
+            "algorithm": "mpc_block_knapsack/knapsack.mpc",
+            "protocol": "mal-shamir.sh",
+            "max_weight": 100,
+            "max_value": 20,
+            "n_parties": 4,
+            "repetitions": 4,
+            "tx_per_party": 2,
+            "has_net_limit": false,
+            "in_parallel": false,
+            "net_limits": {
+                "bandwidth": "10gbps",
+                "latency": "0.3ms"
+            }
+        },
+        {
+            "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
+            "protocol": "mal-shamir.sh",
+            "max_weight": 100,
+            "max_value": 20,
+            "n_parties": 4,
+            "repetitions": 4, 
+            "tx_per_party": 2,
+            "has_net_limit": false,
+            "in_parallel": false,
+            "net_limits": {
+                "bandwidth": "10gbps",
+                "latency": "0.3ms"
+            }
+        }, 
+        {
+            "algorithm": "mpc_knapsack_auction/knapsack_auction.mpc",
+            "protocol": "mal-shamir.sh",
+            "max_weight": 100,
+            "max_value": 20,
+            "n_parties": 4,
+            "repetitions": 4,
+            "tx_per_party": 2,
+            "has_net_limit": false,
+            "in_parallel": false,
+            "net_limits": {
+                "bandwidth": "10gbps",
+                "latency": "0.3ms"
+            }
+        }
     ]
 }

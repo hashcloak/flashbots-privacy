@@ -1,8 +1,8 @@
 
 program.use_edabit(True)
 sfix.round_nearest = True
-cfix.set_precision(f=16, k=80)
-sfix.set_precision(f=16, k=80)
+cfix.set_precision(f=16, k=42)
+sfix.set_precision(f=16, k=42)
 
 class Bidder:
     def __init__(self, id, bids, block_spaces):

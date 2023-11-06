@@ -11,7 +11,15 @@ So far, we have the following experiments:
 
 ## How to run
 
-We have built a testing script to execute experiments using different combinations of parameters. To execute the script you first need to compile the virtual machines of the protocols that you want to test. To do this, we refer to the user to the [MP-SDPZ documentation](https://github.com/data61/MP-SPDZ/blob/master/README.md) where you can find a how to compile such virtual machines. As an example, you can compile the virtual machine for the MASCOT protocol by running the following commands:
+We have built a testing script to execute experiments using different combinations of parameters. To execute the script you first need to compile the virtual machines of the protocols that you want to test. To do this, we refer to the user to the [MP-SDPZ documentation](https://github.com/data61/MP-SPDZ/blob/master/README.md) where you can find a how to compile such virtual machines. We suggest to run the following command to compile all the supported MP-SDPZ virtual machines at once:
+
+```bash
+cd MP-SDPZ
+make -j8
+```
+
+In the case that you don't want to test several protocols, you may compile just the virtual machine that you need. For example, to compile the virtual machine for the protocol MASCOT, you can execute the following command:
+
 
 ```bash
 cd MP-SDPZ

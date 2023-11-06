@@ -16,6 +16,20 @@ logging.basicConfig(
 with open("experiment/config.json", "r") as config_file:
     config = json.load(config_file)
 
+ring_protocols = [
+    "semi2k.sh",
+    "spdz2k.sh",
+    "rep4-ring.sh",
+    "sy-rep-ring.sh",
+]
+
+field_protocols = [
+    "shamir.sh"
+    "mascot.sh"
+    "mal-shamir.sh",
+    "semi.sh",
+    "sy-shamir.sh"
+]
 
 class Experiment:
     """Class that represents an experiment"""
@@ -192,11 +206,25 @@ class Experiment:
 
         logging.info("Compiling MPC file {}".format(self.algorithm))
         path_mpc_file = os.path.join("..", self.algorithm)
+        
+        # Set the compilation flag for rings and fields
+        domain = "-F"
+        if self.protocol in ring_protocols:
+            domain = "-R"
+        elif self.protocol in field_protocols:
+            domain = "-F"
+        
+        # Set the ring size for the greedy aproach in a different way given the
+        # use of fixed-point arithmetic.    
+        ring_size = "64"
+        if self.algorithm == "mpc_knapsack_auction/knapsack_auction.mpc":
+            ring_size = "89" 
+        
         compile_result = subprocess.run(
             [
                 "./compile.py",
-                "-F",
-                "64",
+                domain,
+                ring_size,
                 path_mpc_file,
                 str(self.n_parties),
                 str(self.max_weight),
