@@ -117,6 +117,7 @@ class Experiment:
             "Protocol: {}".format(self.protocol),
             "Max. weight: {}".format(self.max_weight),
             "# Parties: {}".format(self.n_parties),
+            "# Tx per party: {}".format(self.tx_per_party),
             "Date: {}".format(str(date)),
         ]
         
@@ -217,6 +218,8 @@ class Experiment:
         # Set the ring size for the greedy aproach in a different way given the
         # use of fixed-point arithmetic.    
         ring_size = "64"
+        if self.algorithm == "mpc_knapsack_auction/knapsack_auction.mpc":
+            ring_size = "80"
         
         compile_result = subprocess.run(
             [
