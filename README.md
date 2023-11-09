@@ -11,7 +11,15 @@ So far, we have the following experiments:
 
 ## How to run
 
-We have built a testing script to execute experiments using different combinations of parameters. To execute the script you first need to compile the virtual machines of the protocols that you want to test. To do this, we refer to the user to the [MP-SDPZ documentation](https://github.com/data61/MP-SPDZ/blob/master/README.md) where you can find a how to compile such virtual machines. As an example, you can compile the virtual machine for the MASCOT protocol by running the following commands:
+We have built a testing script to execute experiments using different combinations of parameters. To execute the script you first need to compile the virtual machines of the protocols that you want to test. To do this, we refer to the user to the [MP-SDPZ documentation](https://github.com/data61/MP-SPDZ/blob/master/README.md) where you can find a how to compile such virtual machines. We suggest to run the following command to compile all the supported MP-SDPZ virtual machines at once:
+
+```bash
+cd MP-SDPZ
+make -j8
+```
+
+In the case that you don't want to test several protocols, you may compile just the virtual machine that you need. For example, to compile the virtual machine for the protocol MASCOT, you can execute the following command:
+
 
 ```bash
 cd MP-SDPZ
@@ -27,7 +35,9 @@ Before executing the scripts you need to modify the contents of `experiment/conf
     "max_weight": 20,
     "max_value": 10,
     "n_parties": 4,
+    "repetitions": 2,
     "tx_per_party": 5,
+    "in_parallel": false,
     "has_net_limit": false,
     "net_limits": {
         "bandwidth": "10gbps",
@@ -36,7 +46,7 @@ Before executing the scripts you need to modify the contents of `experiment/conf
 }
 ```
 
-In the `algorithm` field you need to specify the path to the `.mpc` file relative to the algorithm that you want to test. The `protocol` field should have the name of the `.sh` file consistent with the available protocols in the MP-SDPZ framework. You can find all the `.sh` files supported [here](https://github.com/data61/MP-SPDZ/tree/master/Scripts). The field `has_net_limits` is a boolean that defines if the protocol will be executed with a specified bandwidth and latency. If this flag is set to `true`, you need to specify the desired bandwidth and latency in the `net_limits` JSON object. The bandwidth and latency must be specified according to the parameters section in the [`tc` command documentation](https://man7.org/linux/man-pages/man8/tc.8.html).
+In the `algorithm` field you need to specify the path to the `.mpc` file relative to the algorithm that you want to test. The `protocol` field should have the name of the `.sh` file consistent with the available protocols in the MP-SDPZ framework. You can find all the `.sh` files supported [here](https://github.com/data61/MP-SPDZ/tree/master/Scripts). The field `has_net_limits` is a boolean that defines if the protocol will be executed with a specified bandwidth and latency. If this flag is set to `true`, you need to specify the desired bandwidth and latency in the `net_limits` JSON object. The bandwidth and latency must be specified according to the parameters section in the [`tc` command documentation](https://man7.org/linux/man-pages/man8/tc.8.html). The tool allows to execute one experiment multiple times by setting the `repetitions` field. Then, the tool will output the average of the running time of each repetition as the result of the experiment. Also, the tool will save all the results for each execution in a `.txt` file inside the `experiment/` folder. The `in_parallel` field is a flag that allow to execute the repetitions for each experiment in parallel using half of the CPU cores.
 
 Once the JSON config file has all the desired experiments to be executed, you can run the experiments using the command
 

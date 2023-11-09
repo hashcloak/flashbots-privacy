@@ -4,6 +4,8 @@ from datetime import datetime
 import subprocess
 import random
 import os.path
+import os
+import multiprocessing
 
 # Setup logging
 logging.basicConfig(
@@ -14,6 +16,20 @@ logging.basicConfig(
 with open("experiment/config.json", "r") as config_file:
     config = json.load(config_file)
 
+ring_protocols = [
+    "semi2k.sh",
+    "spdz2k.sh",
+    "rep4-ring.sh",
+    "sy-rep-ring.sh",
+]
+
+field_protocols = [
+    "shamir.sh"
+    "mascot.sh"
+    "mal-shamir.sh",
+    "semi.sh",
+    "sy-shamir.sh"
+]
 
 class Experiment:
     """Class that represents an experiment"""
@@ -26,6 +42,7 @@ class Experiment:
         max_value: int,
         tx_per_party: int,
         n_parties: int,
+        repetitions: int,
         net_controller=None,
     ) -> None:
         self.algorithm = algorithm
@@ -36,40 +53,118 @@ class Experiment:
         self.tx_per_party = tx_per_party
         self.net_controller = net_controller
         self.has_finished = False
+        self.repetitions = repetitions
         self.result = None
 
-    def run(self) -> str:
+    def parallel_run(self):
         """Runs the experiment with the specified parameters."""
-
+        num_processes = multiprocessing.cpu_count() // 2 
+        pool = multiprocessing.Pool(processes=num_processes)
+        
+        self.times = pool.map(self.run_repetition, range(repetitions))
+        
+        pool.close()
+        pool.join()
+        
+        self.average_time = sum(self.times) / len(self.times)
+        self.save_general_results_file()
+    
+    def regular_run(self) -> None:
+        self.times = []
+        for i in range(repetitions):
+            self.times.append(self.run_repetition(i))
+            
+        self.average_time = sum(self.times) / len(self.times)
+        self.save_general_results_file()
+        
+    def run_repetition(self, repetition):
+        logging.info("Executing repetition {}".format(repetition))
+        
         if self.net_controller is not None:
             self.net_controller.start()
 
         self.setup_ssl()
         self.create_mpc_input_files()
         self.compile_mpc_file()
-        self.result = self.run_mpc_protocol()
+        result = self.run_mpc_protocol()
 
         if self.net_controller is not None:
             self.net_controller.stop()
 
         self.has_finished = True
-        self.save_result_file()
+        self.save_individual_result_file(repetition, result)
         
-    def save_result_file(self) -> None:
-        """Saves the result of the experiment in a file."""
+        running_time = self.extract_time(result)
+        return running_time
         
-        # Set the filename
+    def save_general_results_file(self) -> None:
+        if not os.path.exists("experiment/results"):
+            os.makedirs("experiment/results")
+            
         date = datetime.now()
-        name = "result--{}--{}--{}--{}--{}".format(
+        file_name = "{}--{}--{}--{}--{}".format(
             self.algorithm,
             self.protocol,
             self.max_weight,
             self.n_parties,
             str(date)
-        ).split("/")[1]
+        ).split("/")[1] + ".txt"
         
-        with open("experiment/" + name + ".txt", "w") as file_output:
-            file_output.write(self.result)
+        file_name = "general_result--" + file_name
+        
+        header = [
+            "Algorithm: {}".format(self.algorithm),
+            "Protocol: {}".format(self.protocol),
+            "Max. weight: {}".format(self.max_weight),
+            "# Parties: {}".format(self.n_parties),
+            "# Tx per party: {}".format(self.tx_per_party),
+            "Date: {}".format(str(date)),
+        ]
+        
+        repetition_results = []
+        for i in range(self.repetitions):
+            repetition_results.append(
+                "Time repetition {}: {}".format(str(i), self.times[i])
+            )
+            
+        statistics = [
+            "Avg. running time: {}".format(self.average_time)
+        ]
+        
+        contents = header + [""] + repetition_results + [""] + statistics
+        contents_str = "\n".join(contents)
+        
+        with open("experiment/results/" + file_name, "w") as file:
+            file.write(contents_str)
+           
+    def extract_time(self, result: str) -> float:
+        result_array = result.split("\n");
+        for line in result_array:
+            if line.startswith("Time ="):
+                time_str = line.lstrip("Time =").split("seconds")[0].strip()
+                return float(time_str)
+        
+    def save_individual_result_file(self, repetition: int, result: str) -> None:
+        """Saves the result of the experiment in a file."""
+        
+        if not os.path.exists("experiment/results"):
+            os.makedirs("experiment/results")
+            
+        # Set the filename
+        date = datetime.now()
+        name = "{}--{}--{}--{}--{}--{}".format(
+            self.algorithm,
+            self.protocol,
+            self.max_weight,
+            self.n_parties,
+            str(date),
+            str(repetition)
+        ).split("/")[1] + ".txt"
+        
+        name = "result--" + name
+        
+        with open("experiment/results/" + name, "w") as file_output:
+            file_output.write(result)
         
         logging.info("Results saved in file {}".format(name))
         
@@ -112,11 +207,25 @@ class Experiment:
 
         logging.info("Compiling MPC file {}".format(self.algorithm))
         path_mpc_file = os.path.join("..", self.algorithm)
+        
+        # Set the compilation flag for rings and fields
+        domain = "-F"
+        if self.protocol in ring_protocols:
+            domain = "-R"
+        elif self.protocol in field_protocols:
+            domain = "-F"
+        
+        # Set the ring size for the greedy aproach in a different way given the
+        # use of fixed-point arithmetic.    
+        ring_size = "64"
+        if self.algorithm == "mpc_knapsack_auction/knapsack_auction.mpc":
+            ring_size = "80"
+        
         compile_result = subprocess.run(
             [
                 "./compile.py",
-                "-F",
-                "64",
+                domain,
+                ring_size,
                 path_mpc_file,
                 str(self.n_parties),
                 str(self.max_weight),
@@ -177,6 +286,8 @@ class NetworkController:
 
 
 if __name__ == "__main__":
+    
+    time = datetime.now()
     for exp in config["experiments"]:
         algorithm = exp["algorithm"]
         protocol = exp["protocol"]
@@ -184,6 +295,7 @@ if __name__ == "__main__":
         max_value = exp["max_value"]
         n_parties = exp["n_parties"]
         tx_per_party = exp["tx_per_party"]
+        repetitions = exp["repetitions"]
 
         has_net_limit_response = exp["has_net_limit"]
 
@@ -201,10 +313,14 @@ if __name__ == "__main__":
             max_value,
             tx_per_party,
             n_parties,
+            repetitions,
             net_controller,
         )
-        experiment.run()
-
-        print("=========== Results of the experiment ============")
-        print(experiment.result)
-        print("###############################################################")
+        
+        if exp["in_parallel"]:
+            experiment.parallel_run()
+        else:
+            experiment.regular_run()
+    
+    time = datetime.now() - time
+    print("Running time = {}".format(time))

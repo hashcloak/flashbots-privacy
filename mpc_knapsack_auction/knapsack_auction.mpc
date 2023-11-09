@@ -1,8 +1,8 @@
 
 program.use_edabit(True)
 sfix.round_nearest = True
-cfix.set_precision(f=16, k=80)
-sfix.set_precision(f=16, k=80)
+cfix.set_precision(f=8, k=34)
+sfix.set_precision(f=8, k=34)
 
 class Bidder:
     def __init__(self, id, bids, block_spaces):
@@ -18,13 +18,10 @@ class Bidder:
 def knapsack_auction(bidders, max_block_space, highest_bidder): 
     actual_capacity_of_solution = MemValue(sfix(0))
     actual_solution = []
-    #global counter
-    #counter = MemValue(0)
     n_bidders = bidders.sizes[0]
 
     @for_range(n_bidders)
     def _(i):
-        #nonlocal actual_capacity_of_solution
         current_bidder = bidders[i]
         capacity_to_add = (actual_capacity_of_solution + current_bidder[2] <= max_block_space).if_else(current_bidder[2], 0)
         bidder_to_add = (actual_capacity_of_solution + current_bidder[2] <= max_block_space).if_else(current_bidder, False)
@@ -67,5 +64,6 @@ for bidder in bidders:
 
 bidder_matrix.sort()
 highest_bidder = bidder_matrix[0]
+print_ln("Matrix size: %s", len(bidder_matrix))
 
 knapsack_auction(bidder_matrix, W, highest_bidder)
