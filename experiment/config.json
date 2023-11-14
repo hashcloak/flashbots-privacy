@@ -5,13 +5,13 @@
 
     "experiments": [
         {
-            "algorithm": "mpc_knapsack_auction/knapsack_auction.mpc",
-            "protocol": "mascot.sh",
-            "max_weight": 30000000,
-            "max_value": 20000000,
+            "algorithm": "mpc_block_knapsack/knapsack.mpc",
+            "protocol": "rep4-ring.sh",
+            "max_weight": 300000,
+            "max_value": 200000,
             "n_parties": 4,
-            "repetitions": 2,
-            "tx_per_party": 10,
+            "repetitions": 1,
+            "tx_per_party": 30,
             "has_net_limit": false,
             "in_parallel": false,
             "net_limits": {

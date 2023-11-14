@@ -2,7 +2,7 @@
 /flashbots_mpc/Player-Data/*.key
 /flashbots_mpc/Player-Data/*.0
 
-experiment/results
+experiment/results/
 
 __pycache__
 
