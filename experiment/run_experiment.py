@@ -192,8 +192,8 @@ class Experiment:
         """Creates the input files according to the experiment specifications."""
 
         for i in range(self.n_parties):
-            rand_weights = random.sample(range(1, self.max_weight + 1), self.tx_per_party)
-            rand_values = random.sample(range(self.max_value + 1), self.tx_per_party)
+            rand_weights = random.choices(range(1, self.max_weight + 1), k=self.tx_per_party)
+            rand_values = random.choices(range(self.max_value + 1), k=self.tx_per_party)
             input_file_name = "Input-P{}-0".format(i)
             path_file = os.path.join(config["mp_spdz_input_path"], input_file_name)
             with open(path_file, "w") as file_input:

@@ -131,8 +131,12 @@ values_tmp = []
 weights_tmp = []
 
 for i in range(n):
-    values_tmp.extend(sint.get_input_from(i, size=tx_per_party))
-    weights_tmp.extend(sint.get_input_from(i, size=tx_per_party))
+    values_arr = Array(tx_per_party, sint)
+    weights_arr = Array(tx_per_party, sint)
+    values_arr.input_from(i)
+    weights_arr.input_from(i)
+    values_tmp.extend(values_arr)
+    weights_tmp.extend(weights_arr)
 
 values = Array(n, sint).create_from(values_tmp)
 weights = Array(n, sint).create_from(weights_tmp)
