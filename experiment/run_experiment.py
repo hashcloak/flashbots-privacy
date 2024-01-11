@@ -6,7 +6,7 @@ import random
 import os.path
 import os
 import multiprocessing
-import time
+import time as delay
 
 # Setup logging
 logging.basicConfig(
@@ -74,7 +74,7 @@ class Experiment:
         self.times = []
         for i in range(repetitions):
             self.times.append(self.run_repetition(i))
-            time.sleep(30) # Sleep the execution for some seconds
+            delay.sleep(30) # Sleep the execution for some seconds
             
         self.average_time = sum(self.times) / len(self.times)
         self.save_general_results_file()
