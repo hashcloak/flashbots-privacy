@@ -1,5 +1,4 @@
 import sys
-sys.path.append("../MP-SPDZ")
 from Compiler.oram import OptimalORAM
 from Compiler.types import cfix
 
@@ -7,11 +6,9 @@ def max_knapsack(values, weights, W, n):
     size = n*W
     m = OptimalORAM((n+1)*(W+1))
 
-    @for_range(n+1)
-    def _(i):
-        @for_range(W+1)
-        def _(j):
-            @if_e((i == 0).bit_or(j == 0))
+    for i in range(n + 1):
+        for j in range(W + 1):
+            @if_e(i == 0 or j == 0)
             def _():
                 m[i*(W+1) + j] = 0
             @else_
@@ -37,21 +34,6 @@ def knapsack_subset(index_i, index_j, m, weights):
 
     return subset
 
-        
-"""
-values = OptimalORAM(size=3)
-values[0] = 60
-values[1] = 100
-values[2] = 120
-
-weights = OptimalORAM(size=3)
-weights[0] = 10
-weights[1] = 20
-weights[2] = 30
-
-W = 50
-n = 3
-"""
 
 # Ideally, W should be secret-shared but due to MP-SPDZ limitations, need it to be a compile time constant
 W = int(program.args[2])
@@ -73,6 +55,5 @@ weights = Array(n, sint).create_from(weights_tmp)
 knapsack_val, m = max_knapsack(values, weights, W, n)
 knapsack_subset = knapsack_subset(n, W, m, weights)
 print_ln("Maximal knapsack value: %s", knapsack_val.reveal())
-@for_range(knapsack_subset.size)
-def _(i):
+for i in range(knapsack_subset.size):
     print_ln("Corresponding knapsack set index %s", knapsack_subset[i].reveal())

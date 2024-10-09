@@ -1,22 +1,22 @@
 {
-    "mp_spdz_input_path": "MP-SPDZ/Player-Data/",
-    "shaper_path": "experiment/shaper.sh",
-    "mp_spdz_root": "MP-SPDZ",
-    "experiments": [
-        {
-            "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
-            "protocol": "mal-rep-ring.sh",
-            "max_weight": 30,
-            "max_value": 20,
-            "n_parties": 3,
-            "repetitions": 1,
-            "tx_per_party": 40,
-            "has_net_limit": false,
-            "in_parallel": false,
-            "net_limits": {
-                "bandwidth": "10gbps",
-                "latency": "0.3ms"
-            }
-        }
-    ]
+  "mp_spdz_input_path": "MP-SPDZ/Player-Data/",
+  "shaper_path": "experiment/shaper.sh",
+  "mp_spdz_root": "MP-SPDZ",
+  "experiments": [
+    {
+      "algorithm": "mpc_block_knapsack/knapsack.mpc",
+      "protocol": "mal-rep-ring.sh",
+      "max_weight": 30,
+      "max_value": 20,
+      "n_parties": 3,
+      "repetitions": 3,
+      "tx_per_party": 70,
+      "has_net_limit": false,
+      "in_parallel": false,
+      "net_limits": {
+        "bandwidth": "10gbps",
+        "latency": "0.3ms"
+      }
+    }
+  ]
 }

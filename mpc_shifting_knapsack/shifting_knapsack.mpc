@@ -19,16 +19,13 @@ def knapsack(weights, values, C):
     dp = Matrix(2, C + 1, sint)
     dp.assign_all(0)
 
-    @for_range(N)
-    def _(i):
-        @for_range(C + 1)
-        def _(j):
+    for i in range(N):
+        for j in range(C + 1):
             dp[i % 2][j] = dp[(i + 1) % 2][j]
 
         cyclic_shift(dp[(i + 1) % 2], C + 1 - weights[i], lwC)
 
-        @for_range(C + 1)
-        def _(j):
+        for j in range(C + 1):
             opt2 = dp[(i + 1) % 2][j] + values[i]
             should_mov = (j >= weights[i]) * (opt2 > dp[i % 2][j])
 
@@ -66,8 +63,7 @@ def bitwise_and(a, b):
 def cyclic_shift(values, K, max_log_K):
     K = sint(K) 
 
-    @for_range(max_log_K)
-    def _(i):
+    for i in range(max_log_K):
         shift = cint(1 << (max_log_K - i - 1))
         should_mov = bitwise_and(K, shift) != 0
 

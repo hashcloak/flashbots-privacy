@@ -20,8 +20,7 @@ def knapsack_auction(bidders, max_block_space, highest_bidder):
     actual_solution = []
     n_bidders = bidders.sizes[0]
 
-    @for_range(n_bidders)
-    def _(i):
+    for i in range(n_bidders):
         current_bidder = bidders[i]
         capacity_to_add = (actual_capacity_of_solution + current_bidder[2] <= max_block_space).if_else(current_bidder[2], 0)
         bidder_to_add = (actual_capacity_of_solution + current_bidder[2] <= max_block_space).if_else(current_bidder, False)
