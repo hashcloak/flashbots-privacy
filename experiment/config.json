@@ -5,192 +5,12 @@
   "experiments": [
     {
       "algorithm": "mpc_block_knapsack/knapsack.mpc",
-      "protocol": "semi2k.sh",
-      "max_weight": 100,
-      "max_value": 100,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": true,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_block_knapsack/knapsack.mpc",
-      "protocol": "semi2k.sh",
-      "max_weight": 250,
-      "max_value": 250,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": true,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_block_knapsack/knapsack.mpc",
-      "protocol": "semi2k.sh",
-      "max_weight": 500,
-      "max_value": 500,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": true,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
-      "protocol": "semi2k.sh",
-      "max_weight": 100,
-      "max_value": 100,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": true,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
-      "protocol": "semi2k.sh",
-      "max_weight": 250,
-      "max_value": 250,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": true,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
-      "protocol": "semi2k.sh",
-      "max_weight": 500,
-      "max_value": 500,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": true,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_block_knapsack/knapsack.mpc",
-      "protocol": "semi2k.sh",
-      "max_weight": 100,
-      "max_value": 100,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": false,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_block_knapsack/knapsack.mpc",
-      "protocol": "semi2k.sh",
-      "max_weight": 250,
-      "max_value": 250,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": false,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_block_knapsack/knapsack.mpc",
-      "protocol": "semi2k.sh",
-      "max_weight": 500,
-      "max_value": 500,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": false,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
-      "protocol": "semi2k.sh",
-      "max_weight": 100,
-      "max_value": 100,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": false,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
-      "protocol": "semi2k.sh",
-      "max_weight": 250,
-      "max_value": 250,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": false,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
-      "protocol": "semi2k.sh",
-      "max_weight": 500,
-      "max_value": 500,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": false,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_block_knapsack/knapsack.mpc",
       "protocol": "shamir.sh",
       "max_weight": 100,
       "max_value": 100,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
       "has_net_limit": true,
       "in_parallel": false,
       "net_limits": {
@@ -203,9 +23,9 @@
       "protocol": "shamir.sh",
       "max_weight": 250,
       "max_value": 250,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
       "has_net_limit": true,
       "in_parallel": false,
       "net_limits": {
@@ -218,54 +38,9 @@
       "protocol": "shamir.sh",
       "max_weight": 500,
       "max_value": 500,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": true,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
-      "protocol": "shamir.sh",
-      "max_weight": 100,
-      "max_value": 100,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": true,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
-      "protocol": "shamir.sh",
-      "max_weight": 250,
-      "max_value": 250,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": true,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
-      "protocol": "shamir.sh",
-      "max_weight": 500,
-      "max_value": 500,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
       "has_net_limit": true,
       "in_parallel": false,
       "net_limits": {
@@ -278,9 +53,9 @@
       "protocol": "shamir.sh",
       "max_weight": 100,
       "max_value": 100,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
       "has_net_limit": false,
       "in_parallel": false,
       "net_limits": {
@@ -293,9 +68,9 @@
       "protocol": "shamir.sh",
       "max_weight": 250,
       "max_value": 250,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
       "has_net_limit": false,
       "in_parallel": false,
       "net_limits": {
@@ -308,9 +83,9 @@
       "protocol": "shamir.sh",
       "max_weight": 500,
       "max_value": 500,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
       "has_net_limit": false,
       "in_parallel": false,
       "net_limits": {
@@ -323,9 +98,54 @@
       "protocol": "shamir.sh",
       "max_weight": 100,
       "max_value": 100,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
+      "has_net_limit": true,
+      "in_parallel": false,
+      "net_limits": {
+        "bandwidth": "10gbps",
+        "latency": "0.3ms"
+      }
+    },
+    {
+      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
+      "protocol": "shamir.sh",
+      "max_weight": 250,
+      "max_value": 250,
+      "n_parties": 4,
+      "repetitions": 3,
+      "tx_per_party": 75,
+      "has_net_limit": true,
+      "in_parallel": false,
+      "net_limits": {
+        "bandwidth": "10gbps",
+        "latency": "0.3ms"
+      }
+    },
+    {
+      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
+      "protocol": "shamir.sh",
+      "max_weight": 500,
+      "max_value": 500,
+      "n_parties": 4,
+      "repetitions": 3,
+      "tx_per_party": 75,
+      "has_net_limit": true,
+      "in_parallel": false,
+      "net_limits": {
+        "bandwidth": "10gbps",
+        "latency": "0.3ms"
+      }
+    },
+    {
+      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
+      "protocol": "shamir.sh",
+      "max_weight": 100,
+      "max_value": 100,
+      "n_parties": 4,
+      "repetitions": 3,
+      "tx_per_party": 75,
       "has_net_limit": false,
       "in_parallel": false,
       "net_limits": {
@@ -338,9 +158,9 @@
       "protocol": "shamir.sh",
       "max_weight": 250,
       "max_value": 250,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
       "has_net_limit": false,
       "in_parallel": false,
       "net_limits": {
@@ -353,9 +173,9 @@
       "protocol": "shamir.sh",
       "max_weight": 500,
       "max_value": 500,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
       "has_net_limit": false,
       "in_parallel": false,
       "net_limits": {
@@ -368,9 +188,9 @@
       "protocol": "rep4-ring.sh",
       "max_weight": 100,
       "max_value": 100,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
       "has_net_limit": true,
       "in_parallel": false,
       "net_limits": {
@@ -383,9 +203,9 @@
       "protocol": "rep4-ring.sh",
       "max_weight": 250,
       "max_value": 250,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
       "has_net_limit": true,
       "in_parallel": false,
       "net_limits": {
@@ -398,54 +218,9 @@
       "protocol": "rep4-ring.sh",
       "max_weight": 500,
       "max_value": 500,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": true,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
-      "protocol": "rep4-ring.sh",
-      "max_weight": 100,
-      "max_value": 100,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": true,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
-      "protocol": "rep4-ring.sh",
-      "max_weight": 250,
-      "max_value": 250,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
-      "has_net_limit": true,
-      "in_parallel": false,
-      "net_limits": {
-        "bandwidth": "10gbps",
-        "latency": "0.3ms"
-      }
-    },
-    {
-      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
-      "protocol": "rep4-ring.sh",
-      "max_weight": 500,
-      "max_value": 500,
-      "n_parties": 3,
-      "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
       "has_net_limit": true,
       "in_parallel": false,
       "net_limits": {
@@ -458,9 +233,9 @@
       "protocol": "rep4-ring.sh",
       "max_weight": 100,
       "max_value": 100,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
       "has_net_limit": false,
       "in_parallel": false,
       "net_limits": {
@@ -473,9 +248,9 @@
       "protocol": "rep4-ring.sh",
       "max_weight": 250,
       "max_value": 250,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
       "has_net_limit": false,
       "in_parallel": false,
       "net_limits": {
@@ -488,9 +263,9 @@
       "protocol": "rep4-ring.sh",
       "max_weight": 500,
       "max_value": 500,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
       "has_net_limit": false,
       "in_parallel": false,
       "net_limits": {
@@ -503,9 +278,54 @@
       "protocol": "rep4-ring.sh",
       "max_weight": 100,
       "max_value": 100,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
+      "has_net_limit": true,
+      "in_parallel": false,
+      "net_limits": {
+        "bandwidth": "10gbps",
+        "latency": "0.3ms"
+      }
+    },
+    {
+      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
+      "protocol": "rep4-ring.sh",
+      "max_weight": 250,
+      "max_value": 250,
+      "n_parties": 4,
+      "repetitions": 3,
+      "tx_per_party": 75,
+      "has_net_limit": true,
+      "in_parallel": false,
+      "net_limits": {
+        "bandwidth": "10gbps",
+        "latency": "0.3ms"
+      }
+    },
+    {
+      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
+      "protocol": "rep4-ring.sh",
+      "max_weight": 500,
+      "max_value": 500,
+      "n_parties": 4,
+      "repetitions": 3,
+      "tx_per_party": 75,
+      "has_net_limit": true,
+      "in_parallel": false,
+      "net_limits": {
+        "bandwidth": "10gbps",
+        "latency": "0.3ms"
+      }
+    },
+    {
+      "algorithm": "mpc_shifting_knapsack/shifting_knapsack.mpc",
+      "protocol": "rep4-ring.sh",
+      "max_weight": 100,
+      "max_value": 100,
+      "n_parties": 4,
+      "repetitions": 3,
+      "tx_per_party": 75,
       "has_net_limit": false,
       "in_parallel": false,
       "net_limits": {
@@ -518,9 +338,9 @@
       "protocol": "rep4-ring.sh",
       "max_weight": 250,
       "max_value": 250,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
       "has_net_limit": false,
       "in_parallel": false,
       "net_limits": {
@@ -533,9 +353,9 @@
       "protocol": "rep4-ring.sh",
       "max_weight": 500,
       "max_value": 500,
-      "n_parties": 3,
+      "n_parties": 4,
       "repetitions": 3,
-      "tx_per_party": 100,
+      "tx_per_party": 75,
       "has_net_limit": false,
       "in_parallel": false,
       "net_limits": {
