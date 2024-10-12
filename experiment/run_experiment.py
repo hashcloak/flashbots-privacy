@@ -227,7 +227,7 @@ class Experiment:
         # use of fixed-point arithmetic.
         ring_size = "64"
         if self.algorithm == "mpc_knapsack_auction/knapsack_auction.mpc":
-            ring_size = "80"
+            ring_size = "77"
 
         compile_result = subprocess.run(
             [
